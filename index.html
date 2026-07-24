@@ -622,29 +622,82 @@ form.addEventListener("submit", e=>{
   save(); render();
 });
 
-/* city search over the embedded GeoNames index */
+/* city search: embedded index instantly, full 237k-place index lazy-loaded & cached */
 const CITIES = window.__CITIES || [];
 const cityIn = $("city-search"), cityRes = $("city-results");
+// transliteration-tolerant matching, two tiers:
+// normE — exact-ish (Kochav/Kokhav, Qiryat/Kiryat); skel — consonantal skeleton
+// (Chavot/Havat Yair, Kfar/Kefar, Tzfat/Safed) used as a lower-ranked fallback
+function normE(s){
+  return s.toLowerCase().replace(/[^a-z0-9]/g,"")
+    .replace(/ph/g,"f").replace(/ch|kh/g,"h").replace(/[cq]/g,"k")
+    .replace(/tz|ts/g,"z").replace(/w/g,"v").replace(/(.)\1+/g,"$1");
+}
+function skel(e){ // input: a normE string
+  const t = e.replace(/z/g,"s").replace(/d/g,"t").replace(/b/g,"v");
+  return (t.charAt(0)+t.slice(1).replace(/[aeiouy]/g,"")).replace(/(.)\1+/g,"$1");
+}
+const CITIES_N = CITIES.map(c=>normE(c[0])), CITIES_S = CITIES_N.map(skel);
+let EXTRA = null, extraN = null, extraS = null, extraState = "idle"; // idle|loading|ready|failed
+function loadExtra(){
+  if(extraState!=="idle") return;
+  extraState = "loading";
+  fetch("cities-extra.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }).then(j=>{
+    EXTRA = j;
+    extraN = j.e.map(c=>normE(c[0]+(c[5]?" "+c[5]:"")));
+    extraS = extraN.map(skel);
+    extraState = "ready";
+    cityIn.dispatchEvent(new Event("input"));
+  }).catch(()=>{ extraState = "failed"; cityIn.dispatchEvent(new Event("input")); });
+}
+cityIn.addEventListener("focus", loadExtra);
 cityIn.addEventListener("input", ()=>{
-  const q = cityIn.value.trim().toLowerCase();
-  if(q.length<2){ cityRes.hidden = true; return; }
-  const starts=[], contains=[];
-  for(let i=0;i<CITIES.length && starts.length<8;i++){
-    const n = CITIES[i][0].toLowerCase();
-    if(n.startsWith(q)) starts.push(i);
-    else if(contains.length<8 && n.includes(q)) contains.push(i);
-  }
-  const hits = starts.concat(contains).slice(0,8);
-  cityRes.innerHTML = hits.length
-    ? hits.map(i=>`<button type="button" data-i="${i}">${CITIES[i][0]}<span class="cc">${CITIES[i][1]}</span></button>`).join("")
-    : `<button type="button" disabled>No matching city — try coordinates</button>`;
+  const qe = normE(cityIn.value), qs = skel(qe);
+  if(qe.length<2){ cityRes.hidden = true; return; }
+  loadExtra();
+  const tiers = [[],[],[],[]], seenKey = new Set(); // [exact-starts, exact-contains, skel-starts, skel-contains]
+  const push = (tier, name, cc, payload)=>{
+    const key = name+"|"+cc;
+    if(seenKey.has(key) || tiers[tier].length>=9) return;
+    seenKey.add(key); tiers[tier].push({name, cc, payload});
+  };
+  const scan = (n, s, get)=>{
+    for(let i=0;i<n.length && tiers[0].length<9;i++){
+      if(n[i].startsWith(qe)) { const [nm,cc,p]=get(i); push(0,nm,cc,p); }
+      else if(n[i].includes(qe)) { const [nm,cc,p]=get(i); push(1,nm,cc,p); }
+      else if(s[i].startsWith(qs)) { const [nm,cc,p]=get(i); push(2,nm,cc,p); }
+      else if(s[i].includes(qs)) { const [nm,cc,p]=get(i); push(3,nm,cc,p); }
+    }
+  };
+  scan(CITIES_N, CITIES_S, i=>[CITIES[i][0], CITIES[i][1], CITIES[i]]);
+  if(extraState==="ready")
+    scan(extraN, extraS, i=>{
+      const c = EXTRA.e[i];
+      let nm = c[0], cc = c[1];
+      if(c[5]){ // if the hit came from an alternate name, display that name
+        const pn = normE(c[0]);
+        if(!(pn.includes(qe) || skel(pn).includes(qs))){
+          const a = c[5].split(";").find(a=>{ const an=normE(a); return an.includes(qe)||skel(an).includes(qs); });
+          if(a){ nm = a; cc = c[1]+" · "+c[0]; }
+        }
+      }
+      return [nm, cc, [nm, c[1], c[2], c[3], EXTRA.tzs[c[4]]]];
+    });
+  const hits = tiers.flat().slice(0,9);
+  window.__cityHits = hits;
+  let html = hits.map((h,i)=>`<button type="button" data-i="${i}">${h.name}<span class="cc">${h.cc}</span></button>`).join("");
+  if(extraState==="loading") html += `<button type="button" disabled>Loading full index (237k places, one time)…</button>`;
+  else if(extraState==="failed") html += `<button type="button" disabled>Full index unavailable — showing major cities</button>`;
+  else if(!hits.length) html = `<button type="button" disabled>No matching place — try coordinates</button>`;
+  cityRes.innerHTML = html;
   cityRes.hidden = false;
 });
 cityRes.addEventListener("click", e=>{
   const b = e.target.closest("button[data-i]"); if(!b) return;
-  const [n,co,la,lo,tz] = CITIES[+b.dataset.i];
+  const [n,co,la,lo,tz] = window.__cityHits[+b.dataset.i].payload;
+  const il = co==="IL" || /^Asia\/(Jerusalem|Hebron|Gaza)$/.test(tz);
   loc = {id:"__custom", name:`${n} (${co})`, lat:la, lon:lo, tz,
-         candles: (n==="Jerusalem"&&co==="IL") ? 40 : 18, israel: co==="IL"};
+         candles: (n==="Jerusalem"&&co==="IL") ? 40 : 18, israel: il};
   sel.value = "__custom"; cityIn.value = ""; cityRes.hidden = true;
   save(); render();
 });
