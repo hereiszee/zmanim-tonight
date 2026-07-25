@@ -752,18 +752,38 @@ function render(){
   );
   if(fastToday && z.tzeit && !/Yom Kippur/.test(fastToday.name))
     rows.push(["fastEnd","Fast ends","nightfall"]);
-  if(z.tzeit){
-    z.candlesLate = z.tzeit; z.ends = z.tzeit;
-    if(todayIsRest && tomorrowIsRest)
-      rows.push(["candlesLate","Candle lighting","after nightfall, from an existing flame"]);
-    else if(todayIsRest)
-      rows.push(["ends", wd==="Sat" ? "Shabbat ends" : "Yom Tov ends", "havdalah, 8.5°"]);
+  // Shabbat/chag block schedule — shown from erev onward, since during the
+  // rest days themselves the user won't be checking. Covers multi-day blocks
+  // (2-day chag, chag→Shabbat, Shabbat→chag) with per-transition candle rules.
+  if(isErev || todayIsRest){
+    const block = [];
+    let d = todayIsRest ? today : addDays(today,1);
+    while(isRestYmd(d) && block.length<4){ block.push(d); d = addDays(d,1); }
+    const wdOf = y => new Intl.DateTimeFormat(undefined,{timeZone:"UTC",weekday:"long"}).format(noonUTC(y));
+    for(let i=0;i<block.length;i++){
+      const day = block[i], zi = iso(day)===iso(today) ? z : computeZmanim(day);
+      const key = "blk"+i;
+      if(i < block.length-1){
+        const nextIsShabbat = weekdayInTz(noonUTC(block[i+1]),"UTC")==="Sat";
+        if(nextIsShabbat && zi.candles){
+          z[key] = zi.candles;
+          rows.push([key, `Candles ${wdOf(day)}`, "before sunset, from an existing flame"]);
+        } else if(zi.tzeit){
+          z[key] = zi.tzeit;
+          rows.push([key, `Candles ${wdOf(day)} night`, "after nightfall, from an existing flame"]);
+        }
+      } else if(zi.tzeit){
+        z[key] = zi.tzeit;
+        const lbl = weekdayInTz(noonUTC(day),"UTC")==="Sat" ? "Shabbat ends" : "Yom Tov ends";
+        rows.push([key, lbl, `${wdOf(day)} night · R"T ${fmtTime(zi.rt)}`]);
+      }
+    }
   }
   rows.push(["rt","Rabbeinu Tam","72 min after sunset"]);
   $("times").innerHTML = rows.map(([k,name,sub])=>{
     const t = z[k];
     const passed = t && t < now;
-    const hero = ["candles","tzeit","candlesLate","ends","fastStart","fastEnd"].includes(k);
+    const hero = ["candles","tzeit","fastStart","fastEnd"].includes(k) || k.startsWith("blk");
     return `<div class="zman${passed?" passed":""}${hero?" hero":""}">
       <span class="name">${name}${sub?`<small>${sub}</small>`:""}</span>
       <span class="t">${fmtTime(t)}</span></div>`;
@@ -814,6 +834,7 @@ function renderBand(now, today, z, rows){
   band.querySelectorAll(".tick,.now").forEach(el=>el.remove());
   for(const [k] of rows){
     const t = z[k]; if(!t) continue;
+    if(t - dayStartLocal < 0 || t - dayStartLocal > 86400000) continue; // future-day rows stay off today's band
     const el = document.createElement("div");
     el.className = "tick"+((k==="sunset"||k==="sunrise"||k==="tzeit")?" major":"");
     el.style.left = (pos(t)*100)+"%";
