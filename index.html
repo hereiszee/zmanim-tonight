@@ -188,6 +188,7 @@ footer strong{color:var(--ink)}
       <div class="parsha-name serif" id="parsha-name">—</div>
       <div class="mini-note" id="parsha-date"></div>
       <div id="parsha-special"></div>
+      <div class="mini-note" id="parsha-diverge"></div>
       <div class="mini-note mevarchim" id="mevarchim-line"></div>
     </div>
     <div class="mini-card">
@@ -606,6 +607,12 @@ function render(){
     $("parsha-date").textContent = new Intl.DateTimeFormat(undefined,{timeZone:"UTC",month:"long",day:"numeric"})
       .format(noonUTC(sat)) + (loc.israel ? " · Israel schedule" : "");
     $("parsha-special").innerHTML = P.sp[satIso] ? `<span class="special-shabbat">${P.sp[satIso]}</span>` : "";
+    // divergence weeks: show what the other zone reads
+    const otherIdx = (loc.israel ? P.d : P.il)[satIso];
+    $("parsha-diverge").textContent = (sat.y<=2046 && otherIdx!==idx)
+      ? (loc.israel ? "Outside Israel: " : "In Israel: ") +
+        (otherIdx===undefined ? "Yom Tov reading" : "Parashat "+P.names[otherIdx])
+      : "";
   }
 
   // Moon + molad + kiddush levana
