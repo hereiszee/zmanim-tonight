@@ -882,6 +882,8 @@ function render(){
   // Priority: fast end → candle lighting → Shabbat/chag block times → next zman.
   {
     const rowByKey = key => rows.find(r=>r[0]===key);
+    // disambiguate rows that appear twice under different shitos
+    const qname = (name, sub) => name + (sub && /Avraham|Gra/.test(sub) ? ` — ${sub}` : "");
     let hero = null;
     const PRIORITY = ["fastEnd","candles","blk0","blk1","blk2","blk3"];
     if(live){
@@ -890,7 +892,7 @@ function render(){
         if(r && z[k] && z[k] > now){ hero = {name:r[1], t:z[k]}; break; }
       }
       if(!hero){
-        hero = rows.map(([k,name])=>({name, t:z[k]})).filter(r=>r.t && r.t>now)
+        hero = rows.map(([k,name,sub])=>({name:qname(name,sub), t:z[k]})).filter(r=>r.t && r.t>now)
           .sort((a,b)=>a.t-b.t)[0] || null;
       }
       if(hero){
