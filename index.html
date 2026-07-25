@@ -167,6 +167,18 @@ h1 .heb{color:var(--gold); margin-left:.4rem; font-weight:600}
 .pasuk-n{color:var(--gold); font-size:.85em; margin-inline-start:.15rem}
 .rd-tg{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   color:var(--ink-dim); font-size:1.1rem; line-height:1.75; margin:0 1.2rem 1rem 0}
+.datenav{display:flex; align-items:center; gap:.5rem; flex-wrap:wrap}
+.datenav button{background:var(--surface); color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:.45rem .8rem; font:inherit; cursor:pointer}
+.datenav button:hover{border-color:var(--gold)}
+.datenav button:focus-visible,.datenav input:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.datenav input{background:var(--surface); color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:.4rem .6rem; font:inherit; color-scheme:dark light}
+#dn-today{color:var(--gold); font-weight:600}
+.sulam-slot{margin:.4rem 0 1rem}
+.sulam-btn{color:var(--rose); font-size:.95rem}
+.rd-sulam-ref{margin:.9rem 0 .2rem; font-size:.8rem; color:var(--ink-dim); font-weight:600; text-align:right}
+.rd-sulam{font-size:1.15rem; color:var(--ink)}
 .haman-card{border-color:var(--gold)}
 .haman-btn{font-size:1.05rem}
 .haman-btn strong{font-size:1.25rem}
@@ -185,6 +197,13 @@ footer strong{color:var(--ink)}
     <div class="loc-line" id="loc-line">—</div>
     <div id="holiday-slot"></div>
   </header>
+
+  <div class="datenav">
+    <button id="dn-prev" type="button" aria-label="Previous day">◀</button>
+    <input id="dn-date" type="date" min="2025-01-01" max="2046-12-31" aria-label="Choose a date">
+    <button id="dn-next" type="button" aria-label="Next day">▶</button>
+    <button id="dn-today" type="button" hidden>Back to today</button>
+  </div>
 
   <div class="next" id="next-card">
     <span class="lbl">Next</span>
@@ -562,20 +581,27 @@ function computeZmanim(ymd){
 
 /* ---------- render ---------- */
 const $ = id => document.getElementById(id);
+let viewDate = null; // null = live today; {y,m,d} = browsing another date
 
 function render(){
   const now = new Date();
-  const today = partsInTz(now, loc.tz);
+  const live = !viewDate;
+  const today = live ? partsInTz(now, loc.tz) : viewDate;
   const z = computeZmanim(today);
 
-  // Hebrew date, rolling over at sunset
-  const afterSunset = z.sunset && now > z.sunset;
+  $("dn-date").value = iso(today);
+  $("dn-today").hidden = live;
+
+  // Hebrew date, rolling over at sunset (only meaningful when viewing the live day)
+  const afterSunset = live && z.sunset && now > z.sunset;
   const hebDate = afterSunset ? addDays(today,1) : today;
   const hp = hebrewParts(new Date(Date.UTC(hebDate.y, hebDate.m-1, hebDate.d, 12)));
   $("hdate-en").textContent = hp.en;
   $("hdate-he").textContent = hp.he;
   $("rollnote").textContent = afterSunset ? "· after sunset — the new Jewish day has begun" : "";
-  $("gdate").textContent = new Intl.DateTimeFormat(undefined,{timeZone:loc.tz,weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(now);
+  $("gdate").textContent = live
+    ? new Intl.DateTimeFormat(undefined,{timeZone:loc.tz,weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(now)
+    : new Intl.DateTimeFormat(undefined,{timeZone:"UTC",weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(noonUTC(today));
 
   const hYearNum = +hp.year;
   const rolled = afterSunset ? addDays(today,1) : today;
@@ -617,8 +643,8 @@ function render(){
     const P = window.__PARSHA || {names:[],d:{},il:{},sp:{}};
     let sat = today, hops = 0;
     while(weekdayInTz(noonUTC(sat),"UTC")!=="Sat" && hops<7){ sat = addDays(sat,1); hops++; }
-    // after Shabbat ends, look to next week
-    if(hops===0 && z.tzeit && now > z.tzeit) sat = addDays(sat,7);
+    // after Shabbat ends, look to next week (live view only)
+    if(live && hops===0 && z.tzeit && now > z.tzeit) sat = addDays(sat,7);
     window.__satYmd = sat;
     const satIso = iso(sat);
     const idx = (loc.israel ? P.il : P.d)[satIso];
@@ -635,8 +661,9 @@ function render(){
       : "";
   }
 
-  // Moon + molad + kiddush levana
-  const ph = moonPhase(now);
+  // Moon + molad + kiddush levana (relative to the viewed date)
+  const refMs = live ? now.getTime() : noonUTC(today).getTime();
+  const ph = moonPhase(new Date(refMs));
   $("moon-svg").innerHTML = moonSVG(ph, loc.lat<0);
   $("moon-name").textContent = ph.name;
   $("moon-detail").textContent = `${Math.round(ph.illum*100)}% illuminated · lunar day ${Math.max(1,Math.ceil(ph.age))}`;
@@ -650,8 +677,8 @@ function render(){
     const kStart = m0 + 3*86400000, kEnd = m0 + (14*24 + 18)*3600000 + 22*60000;
     const fmtD = t => new Intl.DateTimeFormat(undefined,{timeZone:loc.tz,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(t));
     $("levana-line").textContent =
-      now.getTime() < kStart ? `Kiddush Levana: from ${fmtD(kStart)}` :
-      now.getTime() <= kEnd  ? `Kiddush Levana: until ${fmtD(kEnd)}` :
+      refMs < kStart ? `Kiddush Levana: from ${fmtD(kStart)}` :
+      refMs <= kEnd  ? `Kiddush Levana: until ${fmtD(kEnd)}` :
       `Kiddush Levana: after the next molad`;
   }
 
@@ -810,34 +837,40 @@ function render(){
   rows.push(["rt","Rabbeinu Tam","72 min after sunset"]);
   $("times").innerHTML = rows.map(([k,name,sub])=>{
     const t = z[k];
-    const passed = t && t < now;
+    const passed = live && t && t < now;
     const hero = ["candles","tzeit","fastStart","fastEnd"].includes(k) || k.startsWith("blk");
     return `<div class="zman${passed?" passed":""}${hero?" hero":""}">
       <span class="name">${name}${sub?`<small>${sub}</small>`:""}</span>
       <span class="t">${fmtTime(t)}</span></div>`;
   }).join("");
 
-  // Next zman
-  const upcoming = rows.map(([k,name])=>({name, t:z[k]})).filter(r=>r.t && r.t>now)
-    .sort((a,b)=>a.t-b.t)[0];
-  if(upcoming){
-    $("next-name").textContent = upcoming.name;
-    $("next-time").textContent = fmtTime(upcoming.t);
-    const mins = Math.round((upcoming.t-now)/60000);
-    $("next-in").textContent = mins>=60 ? `in ${Math.floor(mins/60)} h ${mins%60} min` : `in ${mins} min`;
-  } else {
-    $("next-name").textContent = "The day is complete";
+  // Next zman (live) or a viewing notice (browsing another date)
+  if(!live){
+    $("next-name").textContent = "Viewing another day";
     $("next-time").textContent = "";
-    $("next-in").textContent = "tomorrow's dawn comes next";
+    $("next-in").textContent = "all times shown are for the selected date";
+  } else {
+    const upcoming = rows.map(([k,name])=>({name, t:z[k]})).filter(r=>r.t && r.t>now)
+      .sort((a,b)=>a.t-b.t)[0];
+    if(upcoming){
+      $("next-name").textContent = upcoming.name;
+      $("next-time").textContent = fmtTime(upcoming.t);
+      const mins = Math.round((upcoming.t-now)/60000);
+      $("next-in").textContent = mins>=60 ? `in ${Math.floor(mins/60)} h ${mins%60} min` : `in ${mins} min`;
+    } else {
+      $("next-name").textContent = "The day is complete";
+      $("next-time").textContent = "";
+      $("next-in").textContent = "tomorrow's dawn comes next";
+    }
   }
 
-  renderBand(now, today, z, rows);
+  renderBand(now, today, z, rows, live);
   $("loc-label").textContent = `Location: ${loc.name||"custom"} —`;
   $("loc-line").textContent = `All times for ${loc.name||"custom location"} · ${loc.israel?"Israel":"Diaspora"} schedule`;
   $("il-check").checked = !!loc.israel;
 }
 
-function renderBand(now, today, z, rows){
+function renderBand(now, today, z, rows, live){
   // position of a Date within this civil day (0..1) in loc tz
   const dayStartLocal = (()=>{ // find UTC ms of local midnight by probing
     const noonUTC = Date.UTC(today.y,today.m-1,today.d,12);
@@ -869,10 +902,12 @@ function renderBand(now, today, z, rows){
     el.title = k;
     band.appendChild(el);
   }
-  const nowEl = document.createElement("div");
-  nowEl.className = "now";
-  nowEl.style.left = (pos(now)*100)+"%";
-  band.appendChild(nowEl);
+  if(live){
+    const nowEl = document.createElement("div");
+    nowEl.className = "now";
+    nowEl.style.left = (pos(now)*100)+"%";
+    band.appendChild(nowEl);
+  }
 
   $("lbl-sunrise").textContent = z.sunrise?fmtTime(z.sunrise):"—";
   $("lbl-sunset").textContent = z.sunset?fmtTime(z.sunset):"—";
@@ -1016,6 +1051,18 @@ document.addEventListener("click", e=>{ if(!e.target.closest(".city-box")) cityR
 const ilCheck = $("il-check");
 ilCheck.addEventListener("change", ()=>{ loc.israel = ilCheck.checked; save(); render(); });
 
+/* ---------- date navigation ---------- */
+function setView(d){ viewDate = d; render(); }
+$("dn-prev").addEventListener("click", ()=>setView(addDays(viewDate || partsInTz(new Date(), loc.tz), -1)));
+$("dn-next").addEventListener("click", ()=>setView(addDays(viewDate || partsInTz(new Date(), loc.tz), 1)));
+$("dn-today").addEventListener("click", ()=>setView(null));
+$("dn-date").addEventListener("change", ()=>{
+  const [y,m,d] = $("dn-date").value.split("-").map(Number);
+  if(!y) return;
+  const t = partsInTz(new Date(), loc.tz);
+  setView(iso({y,m,d})===iso(t) ? null : {y,m,d});
+});
+
 /* ---------- daf yomi reader (Sefaria API, big-type overlay) ---------- */
 const reader = $("reader"), readerBody = $("reader-body"), readerTitle = $("reader-title");
 function closeReader(){ reader.hidden = true; readerBody.innerHTML = ""; }
@@ -1078,6 +1125,8 @@ async function showChok(){
         h += `<h3 class="rd-amud">${s.heRef || s.ref}</h3>`;
         const heT = s.text && s.text.he;
         if(heT) h += `<div class="rd-he rd-chok" dir="rtl" lang="he">${heT}</div>`;
+        if(/^Zohar/.test(s.ref))
+          h += `<div class="sulam-slot"><button type="button" class="learn-link sulam-btn" data-zref="${s.ref}">פירוש הסולם — show HaSulam ▸</button><div class="sulam-out"></div></div>`;
       }
     }
     readerBody.innerHTML = (h || `<p class="rd-status">Empty sheet.</p>`) +
@@ -1099,7 +1148,29 @@ function showHaman(){
   readerBody.innerHTML = h + `<p class="rd-credit">${M.heVersion||"Tanach with Ta'amei HaMikra"} · Targum: ${M.tgVersion||"Onkelos"} · via Sefaria</p>`;
   readerBody.scrollTop = 0;
 }
+async function showSulam(zref, slot, btn){
+  btn.disabled = true;
+  slot.innerHTML = `<p class="rd-status">Loading HaSulam…</p>`;
+  try{
+    const rel = await fetch(`https://www.sefaria.org/api/related/${encodeURIComponent(zref)}`).then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    const refs = [...new Set((rel.links||[]).filter(l=>l.index_title==="Sulam on Zohar").map(l=>l.ref))]
+      .sort((a,b)=>(parseInt(a.match(/(\d+)(?:-\d+)?$/)?.[1]||0)) - (parseInt(b.match(/(\d+)(?:-\d+)?$/)?.[1]||0)));
+    if(!refs.length){ slot.innerHTML = `<p class="rd-status">No HaSulam mapped to this passage on Sefaria.</p>`; return; }
+    const texts = await Promise.all(refs.slice(0,12).map(rf=>
+      fetch(`https://www.sefaria.org/api/texts/${encodeURIComponent(rf.replace(/ /g,"_"))}?context=0`).then(r=>{ if(!r.ok) throw 0; return r.json(); })));
+    slot.innerHTML = texts.map(t=>{
+      const he = [].concat(t.he||[]).join(" ");
+      return he ? `<h4 class="rd-sulam-ref">${t.heRef||t.ref}</h4><div class="rd-he rd-sulam" dir="rtl" lang="he">${he}</div>` : "";
+    }).join("") + `<p class="rd-credit">פירוש הסולם — ר' יהודה אשלג (public domain) · via Sefaria</p>`;
+    btn.hidden = true;
+  }catch(err){
+    btn.disabled = false;
+    slot.innerHTML = `<p class="rd-status">Couldn't load HaSulam (offline?).</p>`;
+  }
+}
 document.addEventListener("click", e=>{
+  const sb = e.target.closest(".sulam-btn");
+  if(sb){ showSulam(sb.dataset.zref, sb.parentElement.querySelector(".sulam-out"), sb); return; }
   const b = e.target.closest(".learn-link"); if(!b) return;
   if(b.dataset.kind==="chok") showChok();
   else if(b.dataset.kind==="haman") showHaman();
