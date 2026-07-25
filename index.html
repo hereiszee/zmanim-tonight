@@ -71,7 +71,13 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 /* the hero is a clock face: one huge time, a small label, a quiet countdown */
 .next{background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
   padding:1.1rem 1.25rem 1.15rem; display:grid; row-gap:.1rem; column-gap:.7rem;
-  grid-template-columns:auto 1fr; grid-template-areas:"lbl lbl" "when when" "what in"}
+  grid-template-columns:auto 1fr; grid-template-areas:"lbl lbl" "when when" "what in" "strip strip"}
+.daven-strip{grid-area:strip; margin-top:.6rem; padding-top:.6rem; border-top:1px solid var(--line);
+  font-size:.86rem; color:var(--ink-dim); display:flex; flex-wrap:wrap; gap:.3rem 1rem; align-items:baseline}
+.daven-strip[hidden]{display:none}
+.daven-strip .svc{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600}
+.daven-strip b{font-weight:600; color:var(--ink)}
+.daven-strip b.on{color:var(--gold)}
 .next .lbl{grid-area:lbl; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
 .next .lbl::before{content:""; display:inline-block; width:9px; height:9px; border-radius:50%;
   background:var(--gold); margin-right:.5rem; vertical-align:baseline}
@@ -234,6 +240,7 @@ footer strong{color:var(--ink)}
     <span class="what" id="next-name">—</span>
     <span class="when" id="next-time">—</span>
     <span class="in" id="next-in"></span>
+    <div class="daven-strip" id="hero-daven" hidden></div>
   </div>
 
   <div class="band-card">
@@ -631,6 +638,7 @@ function render(){
   const hYearNum = +hp.year;
   const rolled = afterSunset ? addDays(today,1) : today;
   window.__rolled = rolled;
+  let davenFacts = null; // filled by the davening card, consumed by the hero strip
   const todayHols = holsFor(rolled).filter(h=>!(h.f&16)); // erev entries get their own treatment
   const wd = weekdayInTz(now, loc.tz);
   const todayIsRest = isRestYmd(today);
@@ -750,6 +758,7 @@ function render(){
     const tal = loc.israel
       ? (key>=K("Heshvan",7) && key<=K("Nisan",14))
       : ((rolledCivil.m===12 && rolledCivil.d>=talStart) || (rolledCivil.m<=4 && key<=K("Nisan",14)));
+    davenFacts = {yvy, hallel, alhanissim};
     const dv = [];
     const row = (l,v,on)=>dv.push(`<div class="dv${on?" on":""}"><span>${l}</span><span class="v">${v}</span></div>`);
     row("Ya'aleh V'Yavo", yvy?"Said":"—", yvy);
@@ -904,6 +913,42 @@ function render(){
       $("next-name").textContent = hero ? hero.name : "—";
       $("next-time").textContent = hero ? fmtTime(hero.t) : "—";
       $("next-in").textContent = "viewing this date";
+    }
+  }
+
+  // Hero davening strip: what to say in the tefillah you're headed to (live only)
+  {
+    const el = $("hero-daven");
+    if(!live || !z.sunrise || !z.tzeit){ el.hidden = true; el.innerHTML = ""; }
+    else {
+      const F = davenFacts || {};
+      const tT = tachanunFor(today), tN = tachanunFor(addDays(today,1));
+      const items = [];
+      if(now < z.chatzot){
+        items.push(`<span class="svc">Shacharit</span>`);
+        items.push(`<b class="${tT.omit?"on":""}">Tachanun ${tT.omit?"omitted":"said"}</b>`);
+        if(F.hallel && F.hallel!=="—") items.push(`<b class="on">Hallel — ${F.hallel.toLowerCase()}</b>`);
+        if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
+        if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
+      } else if(now < z.tzeit){
+        const omit = tT.omit || tN.omit;
+        items.push(`<span class="svc">Mincha</span>`);
+        items.push(`<b class="${omit?"on":""}">Tachanun ${omit?"omitted":"said"}</b>`);
+        if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
+        if(fastToday && !/Yom Kippur/.test(fastToday.name)) items.push(`<b class="on">Aneinu</b>`);
+        if(hp.month==="Av" && hp.day===9) items.push(`<b class="on">Nacheim</b>`);
+        if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
+      } else {
+        items.push(`<span class="svc">Tonight</span>`);
+        const om = omerDay(hp);
+        if(om) items.push(`<b class="on">count Omer day ${om}</b>`);
+        const rcT = holsFor(rolled).find(h=>h.f&4);
+        if(rcT) items.push(`<b class="on">Ya'aleh V'Yavo — ${rcT.name}</b>`);
+        if(isChanukah(rolled)) items.push(`<b class="on">Al HaNissim</b>`);
+        if(items.length===1) items.push(`<b>regular Ma'ariv</b>`);
+      }
+      el.innerHTML = items.join("");
+      el.hidden = false;
     }
   }
 
