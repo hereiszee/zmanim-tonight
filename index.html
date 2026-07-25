@@ -68,14 +68,17 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .datenav button:focus-visible,.datenav input:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
 #dn-today{color:var(--gold); font-weight:600}
 
-.next{background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
-  padding:1rem 1.15rem; display:flex; align-items:baseline; gap:.65rem; flex-wrap:wrap}
-.next .lbl{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
+/* the hero is a clock face: one huge time, a small label, a quiet countdown */
+.next{background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
+  padding:1.1rem 1.25rem 1.15rem; display:grid; row-gap:.1rem; column-gap:.7rem;
+  grid-template-columns:auto 1fr; grid-template-areas:"lbl lbl" "when when" "what in"}
+.next .lbl{grid-area:lbl; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
 .next .lbl::before{content:""; display:inline-block; width:9px; height:9px; border-radius:50%;
   background:var(--gold); margin-right:.5rem; vertical-align:baseline}
-.next .what{font-size:1.15rem; font-weight:600}
-.next .when{font-variant-numeric:tabular-nums; font-weight:700; font-size:1.45rem; color:var(--ink)}
-.next .in{color:var(--ink-dim); font-variant-numeric:tabular-nums}
+.next .when{grid-area:when; font-variant-numeric:tabular-nums; font-weight:700; color:var(--ink);
+  font-size:clamp(2.3rem,8vw,3.1rem); line-height:1.12; letter-spacing:-.015em}
+.next .what{grid-area:what; font-size:1.08rem; font-weight:600}
+.next .in{grid-area:in; align-self:baseline; color:var(--ink-dim); font-variant-numeric:tabular-nums}
 
 .band-card,.mini-card{background:var(--panel); border:1px solid var(--line); border-radius:14px;
   box-shadow:var(--shadow); padding:1rem 1.15rem 1.05rem}
@@ -233,6 +236,14 @@ footer strong{color:var(--ink)}
     <span class="in" id="next-in"></span>
   </div>
 
+  <div class="band-card">
+    <h2>The arc of the day</h2>
+    <div class="band" id="band"><div class="fill" id="band-fill"></div></div>
+    <div class="band-labels"><span>midnight</span><span id="lbl-sunrise">sunrise</span><span>noon</span><span id="lbl-sunset">sunset</span><span>midnight</span></div>
+  </div>
+
+  <div class="times" id="times"></div>
+
   <div class="duo">
     <div class="mini-card">
       <h2>This Shabbat</h2>
@@ -281,13 +292,6 @@ footer strong{color:var(--ink)}
     </div>
   </div>
 
-  <div class="band-card">
-    <h2>The arc of the day</h2>
-    <div class="band" id="band"><div class="fill" id="band-fill"></div></div>
-    <div class="band-labels"><span>midnight</span><span id="lbl-sunrise">sunrise</span><span>noon</span><span id="lbl-sunset">sunset</span><span>midnight</span></div>
-  </div>
-
-  <div class="times" id="times"></div>
 
   <div class="mini-card haman-card">
     <h2>Segulah reading</h2>
@@ -865,23 +869,41 @@ function render(){
       <span class="t">${fmtTime(t)}</span></div>`;
   }).join("");
 
-  // Next zman (live) or a viewing notice (browsing another date)
-  if(!live){
-    $("next-name").textContent = "Viewing another day";
-    $("next-time").textContent = "";
-    $("next-in").textContent = "all times shown are for the selected date";
-  } else {
-    const upcoming = rows.map(([k,name])=>({name, t:z[k]})).filter(r=>r.t && r.t>now)
-      .sort((a,b)=>a.t-b.t)[0];
-    if(upcoming){
-      $("next-name").textContent = upcoming.name;
-      $("next-time").textContent = fmtTime(upcoming.t);
-      const mins = Math.round((upcoming.t-now)/60000);
-      $("next-in").textContent = mins>=60 ? `in ${Math.floor(mins/60)} h ${mins%60} min` : `in ${mins} min`;
+  // Hero display: the one time that matters most right now.
+  // Priority: fast end → candle lighting → Shabbat/chag block times → next zman.
+  {
+    const rowByKey = key => rows.find(r=>r[0]===key);
+    let hero = null;
+    const PRIORITY = ["fastEnd","candles","blk0","blk1","blk2","blk3"];
+    if(live){
+      for(const k of PRIORITY){
+        const r = rowByKey(k);
+        if(r && z[k] && z[k] > now){ hero = {name:r[1], t:z[k]}; break; }
+      }
+      if(!hero){
+        hero = rows.map(([k,name])=>({name, t:z[k]})).filter(r=>r.t && r.t>now)
+          .sort((a,b)=>a.t-b.t)[0] || null;
+      }
+      if(hero){
+        $("next-name").textContent = hero.name;
+        $("next-time").textContent = fmtTime(hero.t);
+        const mins = Math.round((hero.t-now)/60000);
+        $("next-in").textContent = mins>=60 ? `in ${Math.floor(mins/60)} h ${mins%60} min` : `in ${mins} min`;
+      } else {
+        $("next-name").textContent = "The day is complete";
+        $("next-time").textContent = "—";
+        $("next-in").textContent = "tomorrow's dawn comes next";
+      }
     } else {
-      $("next-name").textContent = "The day is complete";
-      $("next-time").textContent = "";
-      $("next-in").textContent = "tomorrow's dawn comes next";
+      // browsing: lead with the date's own key time
+      for(const k of PRIORITY){
+        const r = rowByKey(k);
+        if(r && z[k]){ hero = {name:r[1], t:z[k]}; break; }
+      }
+      if(!hero && z.sunset) hero = {name:"Shkia", t:z.sunset};
+      $("next-name").textContent = hero ? hero.name : "—";
+      $("next-time").textContent = hero ? fmtTime(hero.t) : "—";
+      $("next-in").textContent = "viewing this date";
     }
   }
 
