@@ -109,7 +109,7 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .moon-name{font-weight:600}
 .moon-card .mini-note{margin-top:.2rem; font-variant-numeric:tabular-nums}
 
-.band{position:relative; height:40px; overflow:visible}
+.band{position:relative; height:40px; overflow:visible; margin-top:2rem} /* room for the NOW label */
 .band .fill{position:absolute; inset:0; border-radius:8px}
 .band .tick{position:absolute; top:6px; bottom:6px; width:1.5px; background:var(--bg); opacity:.75}
 .band .tick.major{top:0; bottom:0; width:2.5px; background:var(--gold); opacity:1}
@@ -607,6 +607,8 @@ function computeZmanim(ymd){
     z.shemaMA   = new Date(alot72+3*hourMA);
     z.tefillaMA = new Date(alot72+4*hourMA);
     z.chatzot = new Date(sunrise.getTime()+6*hour);
+    // chatzot halayla — solar midnight, 12 hours after chatzot hayom (tonight's)
+    z.chatzotNight = new Date(z.chatzot.getTime()+12*3600000);
     z.minchaG = new Date(sunrise.getTime()+6.5*hour);
     z.minchaK = new Date(sunrise.getTime()+9.5*hour);
     z.plag    = new Date(sunrise.getTime()+10.75*hour);
@@ -874,6 +876,7 @@ function render(){
     }
   }
   rows.push(["rt","Rabbeinu Tam","72 min after sunset"]);
+  rows.push(["chatzotNight","Chatzot halayla","halachic midnight, tonight"]);
   $("times").innerHTML = rows.map(([k,name,sub])=>{
     const t = z[k];
     const passed = live && t && t < now;
@@ -897,7 +900,10 @@ function render(){
         if(r && z[k] && z[k] > now){ hero = {name:r[1], t:z[k]}; break; }
       }
       if(!hero){
-        hero = rows.map(([k,name,sub])=>({name:qname(name,sub), t:z[k]})).filter(r=>r.t && r.t>now)
+        // chatzot halayla is carried by the Tonight strip, not the headline —
+        // once the day's times are done, tomorrow morning is the useful answer
+        hero = rows.filter(([k])=>k!=="chatzotNight")
+          .map(([k,name,sub])=>({name:qname(name,sub), t:z[k]})).filter(r=>r.t && r.t>now)
           .sort((a,b)=>a.t-b.t)[0] || null;
       }
       if(hero){
@@ -966,10 +972,17 @@ function render(){
         items.push(`<span class="svc">Tonight</span>`);
         const om = omerDay(hp);
         if(om) items.push(`<b class="on">count Omer day ${om}</b>`);
-        const rcT = holsFor(rolled).find(h=>h.f&4);
-        if(rcT) items.push(`<b class="on">Ya'aleh V'Yavo — ${rcT.name}</b>`);
+        if(F.yvy){ // Rosh Chodesh, Yom Tov and Chol HaMoed all take Ya'aleh V'Yavo at night
+          const which = holsFor(rolled).find(h=>h.f&(1|4|8));
+          items.push(`<b class="on">Ya'aleh V'Yavo${which?` — ${which.name}`:""}</b>`);
+        }
         if(isChanukah(rolled)) items.push(`<b class="on">Al HaNissim</b>`);
+        const seder = hp.month==="Nisan" && (hp.day===15 || (!loc.israel && hp.day===16));
         if(items.length===1) items.push(`<b>regular Ma'ariv</b>`);
+        if(z.chatzotNight)
+          items.push(seder
+            ? `<b class="on">afikoman before chatzot ${fmtTime(z.chatzotNight)}</b>`
+            : `<b>Shema &amp; Ma'ariv before chatzot ${fmtTime(z.chatzotNight)}</b>`);
       }
       el.innerHTML = items.join("");
       el.hidden = false;
