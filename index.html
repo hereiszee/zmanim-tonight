@@ -503,7 +503,12 @@ function holsFor(ymd){
   const zone = loc.israel ? "il" : "d";
   if(holZone !== zone){
     holMap = {};
-    for(const [date,n,f] of LU[zone]) (holMap[date] = holMap[date]||[]).push({name:LU.names[n], f});
+    for(const [date,n,f] of LU[zone]){
+      const name = LU.names[n];
+      // Hebcal files the two major fasts under subcat "major", so flag them here
+      const ff = /^Tish'a B'Av( \(observed\))?$|^Yom Kippur$/.test(name) ? (f|2) : f;
+      (holMap[date] = holMap[date]||[]).push({name, f: ff});
+    }
     holZone = zone;
   }
   return holMap[iso(ymd)] || [];
@@ -901,9 +906,26 @@ function render(){
         const mins = Math.round((hero.t-now)/60000);
         $("next-in").textContent = mins>=60 ? `in ${Math.floor(mins/60)} h ${mins%60} min` : `in ${mins} min`;
       } else {
-        $("next-name").textContent = "The day is complete";
-        $("next-time").textContent = "—";
-        $("next-in").textContent = "tomorrow's dawn comes next";
+        // the day is done — look ahead to tomorrow's first deadline
+        const tom = addDays(today,1), zT = computeZmanim(tom);
+        const fT = holsFor(tom).find(h=>h.f&2);
+        if(fT && /Tish'a B'Av|Yom Kippur/.test(fT.name) && zT.tzeit){
+          $("next-name").textContent = "Fast ends"; // began at sunset; runs through tomorrow
+          $("next-time").textContent = fmtTime(zT.tzeit);
+          $("next-in").textContent = "tomorrow night";
+        } else if(fT && zT.alot){
+          $("next-name").textContent = `${fT.name} — fast begins`;
+          $("next-time").textContent = fmtTime(zT.alot);
+          $("next-in").textContent = `dawn tomorrow · netz ${fmtTime(zT.sunrise)}`;
+        } else if(zT.sunrise){
+          $("next-name").textContent = "Netz hachama — tomorrow";
+          $("next-time").textContent = fmtTime(zT.sunrise);
+          $("next-in").textContent = `alot ${fmtTime(zT.alot)}`;
+        } else {
+          $("next-name").textContent = "The day is complete";
+          $("next-time").textContent = "—";
+          $("next-in").textContent = "tomorrow's dawn comes next";
+        }
       }
     } else {
       // browsing: lead with the date's own key time
