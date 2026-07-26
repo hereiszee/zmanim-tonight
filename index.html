@@ -71,10 +71,16 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 /* One instrument: the numerals and the dial share a single card, so the big time
    and the dial's amber sweep always point at the same thing. */
 .next{background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
-  padding:1.1rem 1.25rem 1.15rem; display:grid; column-gap:1.1rem; align-items:center;
+  padding:1.1rem 1.25rem 1.15rem; display:grid; column-gap:1.2rem; align-items:center;
   grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"text dial" "strip strip"}
 .next-text{grid-area:text; min-width:0}
-#dial{grid-area:dial; width:clamp(126px,30vw,172px); aspect-ratio:1; height:auto; display:block}
+#dial{grid-area:dial; width:clamp(126px,30vw,186px); aspect-ratio:1; height:auto; display:block}
+/* With room, the dial anchors the left like a gauge and the readout runs beside it —
+   leftover width then reads as line-end space instead of a hole between the two. */
+@media (min-width:640px){
+  .next{grid-template-columns:auto minmax(0,1fr); grid-template-areas:"dial text" "strip strip";
+        column-gap:1.7rem; padding:1.25rem 1.4rem}
+}
 .whatline{display:flex; align-items:baseline; gap:.5rem; flex-wrap:wrap}
 .then{margin-top:.5rem; font-size:.8rem; color:var(--ink-dim); font-variant-numeric:tabular-nums}
 .then b{font-weight:600; color:var(--ink)}
