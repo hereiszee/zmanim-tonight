@@ -337,7 +337,7 @@ footer strong{color:var(--ink)}
     Computed in your browser with the NOAA solar algorithm — no data leaves this page.
     Dawn is <strong>16.1°</strong> below the horizon, nightfall (tzeit) <strong>8.5°</strong>, Rabbeinu&nbsp;Tam 72&nbsp;minutes.
     Sha'ot zmaniyot per the <strong>Gra</strong> (sunrise–sunset) and <strong>Magen&nbsp;Avraham</strong> (72-minute dawn to nightfall).
-    Candle lighting 18&nbsp;min before sunset (40&nbsp;in Jerusalem). Sea-level horizon; elevation not applied.
+    Candle lighting 18&nbsp;min before sunset (40&nbsp;in Jerusalem). Sea-level horizon; elevation not applied. Chatzot halayla is solar midnight; <strong>Tikkun Chatzot</strong> is given as 6&nbsp;hours after tzeit per the Magen&nbsp;Avraham, the time followed in Breslov.
     Tachanun follows common Ashkenaz practice; minhagim vary.
     Yom tov days follow the Israel/diaspora setting (auto-set from your location).
     Parsha &amp; special-Shabbat schedule (through 2046) from <strong>Hebcal</strong> (hebcal.com, CC&nbsp;BY&nbsp;4.0);
@@ -616,6 +616,9 @@ function computeZmanim(ymd){
     z.chatzot = new Date(sunrise.getTime()+6*hour);
     // chatzot halayla — solar midnight, 12 hours after chatzot hayom (tonight's)
     z.chatzotNight = new Date(z.chatzot.getTime()+12*3600000);
+    // Tikkun Chatzot is a separate question from halachic midnight: the Magen Avraham
+    // time followed in Breslov (Rebbe Nachman) is six clock hours after tzeit.
+    if(z.tzeit) z.tikkunChatzot = new Date(z.tzeit.getTime()+6*3600000);
     z.minchaG = new Date(sunrise.getTime()+6.5*hour);
     z.minchaK = new Date(sunrise.getTime()+9.5*hour);
     z.plag    = new Date(sunrise.getTime()+10.75*hour);
@@ -894,6 +897,8 @@ function render(){
   }
   rows.push(["rt","Rabbeinu Tam","72 min after sunset"]);
   rows.push(["chatzotNight","Chatzot halayla","halachic midnight, tonight"]);
+  if(z.tikkunChatzot)
+    rows.push(["tikkunChatzot","Tikkun Chatzot","from 6 h after tzeit · Magen Avraham, Rebbe Nachman"]);
   $("times").innerHTML = rows.map(([k,name,sub])=>{
     const t = z[k];
     const passed = live && t && t < now;
@@ -916,7 +921,7 @@ function render(){
       // The soonest real deadline wins — a fast/candle/havdalah time or a Shema or
       // tefillah cutoff. Only if none of those are left do we fall back to the next
       // structural marker. (chatzot halayla is carried by the Tonight strip instead.)
-      const upcoming = rows.filter(([k])=>k!=="chatzotNight")
+      const upcoming = rows.filter(([k])=>k!=="chatzotNight" && k!=="tikkunChatzot")
         .map(([k,name,sub])=>({k, name:qname(name,sub), t:z[k], tier:DIAL_TIER[k] ?? 3}))
         .filter(r=>r.t && r.t>now)
         .sort((a,b)=>a.t-b.t);
@@ -1019,7 +1024,7 @@ const DIAL_TIER = {
   shemaMA:1, shema:1, tefillaMA:1, tefilla:1,
   tzeit:2, sunset:2, sunrise:2,
   alot:3, misheyakir:3, chatzot:3, minchaG:3, minchaK:3, plag:3,
-  rt:4, chatzotNight:4,
+  rt:4, chatzotNight:4, tikkunChatzot:4,
 };
 const DIAL_FAMILY = {shemaMA:"shema", shema:"shema", tefillaMA:"tefilla", tefilla:"tefilla"};
 
