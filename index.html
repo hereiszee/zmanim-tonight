@@ -1112,9 +1112,11 @@ function renderDial(now, today, z, rows, live, hero){
     : `24-hour dial for the selected date.`);
 
   // what follows the headline, in one quiet line — the table carries the rest
+  // "also", not "then" — the headline is the soonest *deadline*, so a secondary
+  // mark (netz, say) can legitimately fall before it
   const rest = marks.filter(m=>!m.primary);
   $("then-line").innerHTML = rest.length
-    ? "then " + rest.map(m=>`<b>${fmtTime(m.t)}</b> ${m.name}`).join(" · ")
+    ? "also " + rest.map(m=>`<b>${fmtTime(m.t)}</b> ${m.name}`).join(" · ")
     : "";
 }
 
