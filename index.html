@@ -68,23 +68,30 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .datenav button:focus-visible,.datenav input:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
 #dn-today{color:var(--gold); font-weight:600}
 
-/* the hero is a clock face: one huge time, a small label, a quiet countdown */
+/* One instrument: the numerals and the dial share a single card, so the big time
+   and the dial's amber sweep always point at the same thing. */
 .next{background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
-  padding:1.1rem 1.25rem 1.15rem; display:grid; row-gap:.1rem; column-gap:.7rem;
-  grid-template-columns:auto 1fr; grid-template-areas:"lbl lbl" "when when" "what in" "strip strip"}
+  padding:1.1rem 1.25rem 1.15rem; display:grid; column-gap:1.1rem; align-items:center;
+  grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"text dial" "strip strip"}
+.next-text{grid-area:text; min-width:0}
+#dial{grid-area:dial; width:clamp(126px,30vw,172px); aspect-ratio:1; height:auto; display:block}
+.whatline{display:flex; align-items:baseline; gap:.5rem; flex-wrap:wrap}
+.then{margin-top:.5rem; font-size:.8rem; color:var(--ink-dim); font-variant-numeric:tabular-nums}
+.then b{font-weight:600; color:var(--ink)}
+.then:empty{display:none}
 .daven-strip{grid-area:strip; margin-top:.6rem; padding-top:.6rem; border-top:1px solid var(--line);
   font-size:.86rem; color:var(--ink-dim); display:flex; flex-wrap:wrap; gap:.3rem 1rem; align-items:baseline}
 .daven-strip[hidden]{display:none}
 .daven-strip .svc{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600}
 .daven-strip b{font-weight:600; color:var(--ink)}
 .daven-strip b.on{color:var(--gold)}
-.next .lbl{grid-area:lbl; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
+.next .lbl{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
 .next .lbl::before{content:""; display:inline-block; width:9px; height:9px; border-radius:50%;
   background:var(--gold); margin-right:.5rem; vertical-align:baseline}
-.next .when{grid-area:when; font-variant-numeric:tabular-nums; font-weight:700; color:var(--ink);
+.next .when{font-variant-numeric:tabular-nums; font-weight:700; color:var(--ink);
   font-size:clamp(2.3rem,8vw,3.1rem); line-height:1.12; letter-spacing:-.015em}
-.next .what{grid-area:what; font-size:1.08rem; font-weight:600}
-.next .in{grid-area:in; align-self:baseline; color:var(--ink-dim); font-variant-numeric:tabular-nums}
+.next .what{font-size:1.08rem; font-weight:600}
+.next .in{color:var(--ink-dim); font-variant-numeric:tabular-nums}
 
 .band-card,.mini-card{background:var(--panel); border:1px solid var(--line); border-radius:14px;
   box-shadow:var(--shadow); padding:1rem 1.15rem 1.05rem}
@@ -111,19 +118,10 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 
 /* 24-hour dial: one rotation per day, so morning and evening never collide.
    Noon at top, midnight at bottom — the hand traces the sun's own arc. */
-.dial-wrap{display:flex; gap:1.4rem; align-items:center; flex-wrap:wrap}
-#dial{width:212px; height:212px; flex:none; display:block}
-.dial-legend{display:flex; flex-direction:column; gap:.55rem; flex:1 1 12rem; min-width:11rem}
-.dl-row{display:flex; align-items:baseline; gap:.55rem}
-.dl-row .dot{width:8px; height:8px; border-radius:50%; background:var(--gold); flex:none;
-  position:relative; top:-1px}
-.dl-row .dot.dim{background:var(--ink-dim)}
-.dl-row .nm{font-size:.92rem}
-.dl-row .nm small{display:block; color:var(--ink-dim); font-size:.72rem}
-.dl-row .tm{margin-left:auto; font-variant-numeric:tabular-nums; font-weight:700;
-  font-size:1.02rem; color:var(--gold); white-space:nowrap}
-.dl-row.dim .tm{color:var(--ink-dim); font-weight:600}
-.dial-now{font-size:.72rem; color:var(--ink-dim); letter-spacing:.1em; text-transform:uppercase; font-weight:600}
+@media (max-width:420px){
+  .next{column-gap:.8rem; padding:1rem 1rem 1.05rem}
+  .next .when{font-size:2.15rem}
+}
 
 .times{background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
   padding:.4rem 1.15rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:0 2.2rem}
@@ -242,19 +240,14 @@ footer strong{color:var(--ink)}
   </div>
 
   <div class="next" id="next-card">
-    <span class="lbl">Next</span>
-    <span class="what" id="next-name">—</span>
-    <span class="when" id="next-time">—</span>
-    <span class="in" id="next-in"></span>
-    <div class="daven-strip" id="hero-daven" hidden></div>
-  </div>
-
-  <div class="band-card">
-    <h2>The arc of the day</h2>
-    <div class="dial-wrap">
-      <svg id="dial" viewBox="0 0 200 200" role="img" aria-label="24-hour dial"></svg>
-      <div class="dial-legend" id="dial-legend"></div>
+    <div class="next-text">
+      <div class="lbl">Next</div>
+      <div class="when" id="next-time">—</div>
+      <div class="whatline"><span class="what" id="next-name">—</span> <span class="in" id="next-in"></span></div>
+      <div class="then" id="then-line"></div>
     </div>
+    <svg id="dial" viewBox="0 0 200 200" role="img" aria-label="24-hour dial"></svg>
+    <div class="daven-strip" id="hero-daven" hidden></div>
   </div>
 
   <div class="times" id="times"></div>
@@ -628,7 +621,17 @@ function computeZmanim(ymd){
 
 /* ---------- render ---------- */
 const $ = id => document.getElementById(id);
-let viewDate = null; // null = live today; {y,m,d} = browsing another date
+let viewDate = null;   // null = live today; {y,m,d} = browsing another date
+let heroTarget = null; // ms of the live hero deadline, for the countdown ticker
+
+// A 24-hour dial can't show seconds meaningfully, but the last minutes before a
+// deadline are exactly when they matter — so the countdown gains them, not the face.
+function fmtCountdown(ms){
+  const s = Math.max(0, Math.round(ms/1000));
+  if(s >= 3600){ const m = Math.round(s/60); return `in ${Math.floor(m/60)} h ${m%60} min`; }
+  if(s >= 600) return `in ${Math.round(s/60)} min`;
+  return `in ${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+}
 
 function render(){
   const now = new Date();
@@ -895,30 +898,29 @@ function render(){
   }).join("");
 
   // Hero display: the one time that matters most right now.
-  // Priority: fast end → candle lighting → Shabbat/chag block times → next zman.
+  let heroInfo = null; // shared with the dial so both point at the same zman
   {
     const rowByKey = key => rows.find(r=>r[0]===key);
     // disambiguate rows that appear twice under different shitos
     const qname = (name, sub) => name + (sub && /Avraham|Gra/.test(sub) ? ` — ${sub}` : "");
     let hero = null;
+    heroTarget = null; // the per-second ticker only runs when a live deadline is set
     const PRIORITY = ["fastEnd","candles","blk0","blk1","blk2","blk3"];
     if(live){
-      for(const k of PRIORITY){
-        const r = rowByKey(k);
-        if(r && z[k] && z[k] > now){ hero = {name:r[1], t:z[k]}; break; }
-      }
-      if(!hero){
-        // chatzot halayla is carried by the Tonight strip, not the headline —
-        // once the day's times are done, tomorrow morning is the useful answer
-        hero = rows.filter(([k])=>k!=="chatzotNight")
-          .map(([k,name,sub])=>({name:qname(name,sub), t:z[k]})).filter(r=>r.t && r.t>now)
-          .sort((a,b)=>a.t-b.t)[0] || null;
-      }
+      // The soonest real deadline wins — a fast/candle/havdalah time or a Shema or
+      // tefillah cutoff. Only if none of those are left do we fall back to the next
+      // structural marker. (chatzot halayla is carried by the Tonight strip instead.)
+      const upcoming = rows.filter(([k])=>k!=="chatzotNight")
+        .map(([k,name,sub])=>({k, name:qname(name,sub), t:z[k], tier:DIAL_TIER[k] ?? 3}))
+        .filter(r=>r.t && r.t>now)
+        .sort((a,b)=>a.t-b.t);
+      hero = upcoming.find(r=>r.tier<=1) || upcoming[0] || null;
+      heroInfo = hero;
       if(hero){
         $("next-name").textContent = hero.name;
         $("next-time").textContent = fmtTime(hero.t);
-        const mins = Math.round((hero.t-now)/60000);
-        $("next-in").textContent = mins>=60 ? `in ${Math.floor(mins/60)} h ${mins%60} min` : `in ${mins} min`;
+        heroTarget = hero.t.getTime();
+        $("next-in").textContent = fmtCountdown(heroTarget - now.getTime());
       } else {
         // the day is done — look ahead to tomorrow's first deadline
         const tom = addDays(today,1), zT = computeZmanim(tom);
@@ -945,9 +947,10 @@ function render(){
       // browsing: lead with the date's own key time
       for(const k of PRIORITY){
         const r = rowByKey(k);
-        if(r && z[k]){ hero = {name:r[1], t:z[k]}; break; }
+        if(r && z[k]){ hero = {k, name:r[1], t:z[k]}; break; }
       }
-      if(!hero && z.sunset) hero = {name:"Shkia", t:z.sunset};
+      if(!hero && z.sunset) hero = {k:"sunset", name:"Shkia", t:z.sunset};
+      heroInfo = hero;
       $("next-name").textContent = hero ? hero.name : "—";
       $("next-time").textContent = hero ? fmtTime(hero.t) : "—";
       $("next-in").textContent = "viewing this date";
@@ -997,7 +1000,7 @@ function render(){
     }
   }
 
-  renderDial(now, today, z, rows, live);
+  renderDial(now, today, z, rows, live, heroInfo);
   $("loc-label").textContent = `Location: ${loc.name||"custom"} —`;
   $("loc-line").textContent = `All times for ${loc.name||"custom location"} · ${loc.israel?"Israel":"Diaspora"} schedule`;
   $("il-check").checked = !!loc.israel;
@@ -1014,7 +1017,7 @@ const DIAL_TIER = {
 };
 const DIAL_FAMILY = {shemaMA:"shema", shema:"shema", tefillaMA:"tefilla", tefilla:"tefilla"};
 
-function renderDial(now, today, z, rows, live){
+function renderDial(now, today, z, rows, live, hero){
   const dayStart = (()=>{ // UTC ms of local midnight
     const noonUTCms = Date.UTC(today.y,today.m-1,today.d,12);
     const off = tzOffsetMin(new Date(noonUTCms), loc.tz);
@@ -1064,9 +1067,12 @@ function renderDial(now, today, z, rows, live){
       text-anchor="middle" dominant-baseline="middle" letter-spacing="0.4">${txt}</text>`;
   }
 
-  // pick the 1–3 most consequential upcoming marks
+  // The primary mark is always the hero's own zman, so the dial and the numerals
+  // never point at different things. Two more follow, chosen by consequence.
   const ref = live ? now.getTime() : dayStart;
   const seen = new Set(), cand = [];
+  const heroFam = hero && (DIAL_FAMILY[hero.k] || hero.k);
+  if(heroFam) seen.add(heroFam);
   for(const [k,name,sub] of rows){
     const t = z[k];
     if(!inDay(t) || t.getTime() <= ref) continue;
@@ -1076,15 +1082,17 @@ function renderDial(now, today, z, rows, live){
     cand.push({k, name, sub, t, tier: DIAL_TIER[k] ?? 3});
   }
   cand.sort((a,b)=> a.tier-b.tier || a.t-b.t);
-  const marks = cand.slice(0,3).sort((a,b)=> a.t-b.t);
+  const primary = hero && inDay(hero.t) ? {k:hero.k, name:hero.name, t:hero.t, primary:true} : null;
+  const marks = (primary ? [primary] : []).concat(cand.slice(0, primary?2:3))
+    .sort((a,b)=> a.t-b.t);
 
-  // the gap between the hand and the next mark IS the countdown — draw it as an
+  // the gap between the hand and the hero's mark IS the countdown — draw it as an
   // inner sweep so nothing crowds the hour labels outside the ring
-  if(live && marks.length && inDay(now))
-    svg += arc(ang(now), ang(marks[0].t), R-W/2-6, 2, c("--gold"), `opacity="0.8" stroke-linecap="round"`);
-  marks.forEach((m,i)=>{
-    svg += line(ang(m.t), R-W/2-1, R+W/2+2, c("--gold"), i===0?3:2, `opacity="${i===0?1:0.6}"`);
-    if(i===0){
+  if(live && primary && inDay(now))
+    svg += arc(ang(now), ang(primary.t), R-W/2-6, 2, c("--gold"), `opacity="0.8" stroke-linecap="round"`);
+  marks.forEach(m=>{
+    svg += line(ang(m.t), R-W/2-1, R+W/2+2, c("--gold"), m.primary?3:2, `opacity="${m.primary?1:0.6}"`);
+    if(m.primary){
       const [x,y] = pt(ang(m.t), R+W/2+5);
       svg += `<circle cx="${x}" cy="${y}" r="3" fill="${c("--gold")}"/>`;
     }
@@ -1100,24 +1108,14 @@ function renderDial(now, today, z, rows, live){
   const dial = $("dial");
   dial.innerHTML = svg;
   dial.setAttribute("aria-label", live
-    ? `24-hour dial. Now ${fmtTime(now)}.` + (marks.length?` Next: ${marks[0].name} at ${fmtTime(marks[0].t)}.`:"")
+    ? `24-hour dial. Now ${fmtTime(now)}.` + (primary?` Next: ${primary.name} at ${fmtTime(primary.t)}.`:"")
     : `24-hour dial for the selected date.`);
 
-  $("dial-legend").innerHTML =
-    (live ? `<div class="dial-now">Now ${fmtTime(now)}</div>` : "") +
-    (marks.length
-      ? marks.map((m,i)=>`<div class="dl-row${i?" dim":""}">
-          <span class="dot${i?" dim":""}"></span>
-          <span class="nm">${m.name}${m.sub?`<small>${m.sub}</small>`:""}</span>
-          <span class="tm">${fmtTime(m.t)}</span></div>`).join("")
-      : (()=>{ // day complete — carry the eye to tomorrow's first light
-          const zT = computeZmanim(addDays(today,1));
-          return zT.sunrise
-            ? `<div class="dl-row dim"><span class="dot dim"></span>
-                 <span class="nm">Netz hachama<small>tomorrow · alot ${fmtTime(zT.alot)}</small></span>
-                 <span class="tm">${fmtTime(zT.sunrise)}</span></div>`
-            : `<div class="dl-row dim"><span class="dot dim"></span><span class="nm">Nothing further today</span></div>`;
-        })());
+  // what follows the headline, in one quiet line — the table carries the rest
+  const rest = marks.filter(m=>!m.primary);
+  $("then-line").innerHTML = rest.length
+    ? "then " + rest.map(m=>`<b>${fmtTime(m.t)}</b> ${m.name}`).join(" · ")
+    : "";
 }
 
 function tzOffsetMin(date, tz){
@@ -1386,6 +1384,15 @@ document.addEventListener("click", e=>{
 
 render();
 setInterval(render, 30000);
+
+// per-second countdown inside the final 10 minutes; re-render the moment one passes
+setInterval(()=>{
+  if(heroTarget === null) return;
+  const ms = heroTarget - Date.now();
+  if(ms <= 0){ render(); return; }
+  if(ms < 600000) $("next-in").textContent = fmtCountdown(ms);
+}, 1000);
+
 
 // offline support when hosted as a PWA (no-op on other hosts)
 if("serviceWorker" in navigator && location.protocol==="https:"){
