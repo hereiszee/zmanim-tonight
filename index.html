@@ -338,7 +338,7 @@ footer strong{color:var(--ink)}
     Dawn is <strong>16.1°</strong> below the horizon, nightfall (tzeit) <strong>8.5°</strong>, Rabbeinu&nbsp;Tam 72&nbsp;minutes.
     Sha'ot zmaniyot per the <strong>Gra</strong> (sunrise–sunset) and <strong>Magen&nbsp;Avraham</strong> (72-minute dawn to nightfall).
     Candle lighting 18&nbsp;min before sunset (40&nbsp;in Jerusalem). Sea-level horizon; elevation not applied. Chatzot halayla is solar midnight; <strong>Tikkun Chatzot</strong> is given as 6&nbsp;hours after tzeit per the Magen&nbsp;Avraham, the time followed in Breslov.
-    Tachanun follows common Ashkenaz practice; minhagim vary.
+    Tachanun follows common Ashkenaz practice; minhagim vary. <strong>L'David</strong> (Ps.&nbsp;27) is shown from 1&nbsp;Elul through Shemini&nbsp;Atzeret, said twice daily — Shacharit, and Mincha or Ma'ariv by custom; some conclude at Hoshana&nbsp;Rabbah.
     Yom tov days follow the Israel/diaspora setting (auto-set from your location).
     Parsha &amp; special-Shabbat schedule (through 2046) from <strong>Hebcal</strong> (hebcal.com, CC&nbsp;BY&nbsp;4.0);
     city index from <strong>GeoNames</strong> (CC&nbsp;BY&nbsp;4.0) and <strong>©&nbsp;OpenStreetMap</strong> contributors (ODbL);
@@ -785,11 +785,15 @@ function render(){
     const tal = loc.israel
       ? (key>=K("Heshvan",7) && key<=K("Nisan",14))
       : ((rolledCivil.m===12 && rolledCivil.d>=talStart) || (rolledCivil.m<=4 && key<=K("Nisan",14)));
-    davenFacts = {yvy, hallel, alhanissim};
+    // L'David Hashem Ori (Ps. 27) — twice daily from 1 Elul through Shemini Atzeret.
+    // 22 Tishrei is Shemini Atzeret in both zones, so one rule reads right in each.
+    const ldavid = hp.month==="Elul" || (hp.month==="Tishri" && hp.day<=22);
+    davenFacts = {yvy, hallel, alhanissim, ldavid};
     const dv = [];
     const row = (l,v,on)=>dv.push(`<div class="dv${on?" on":""}"><span>${l}</span><span class="v">${v}</span></div>`);
     row("Ya'aleh V'Yavo", yvy?"Said":"—", yvy);
     row("Hallel", hallel, hallel!=="—");
+    if(ldavid) row("L'David (Ps. 27)", "twice daily", true);
     if(alhanissim) row("Al HaNissim", "Said", true);
     row("Rain", (mashiv?"Mashiv HaRuach":"Morid HaTal")+mashivNote, mashiv);
     row("Tal U'Matar", tal?"V'Ten Tal U'Matar":"V'Ten Beracha", tal);
@@ -982,6 +986,7 @@ function render(){
         if(F.hallel && F.hallel!=="—") items.push(`<b class="on">Hallel — ${F.hallel.toLowerCase()}</b>`);
         if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
         if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
+        if(F.ldavid) items.push(`<b class="on">L'David</b>`);
       } else if(now < z.tzeit){
         const omit = tT.omit || tN.omit;
         items.push(`<span class="svc">Mincha</span>`);
