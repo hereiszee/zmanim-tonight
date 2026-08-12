@@ -338,7 +338,7 @@ footer strong{color:var(--ink)}
     Dawn is <strong>16.1°</strong> below the horizon, nightfall (tzeit) <strong>8.5°</strong>, Rabbeinu&nbsp;Tam 72&nbsp;minutes.
     Sha'ot zmaniyot per the <strong>Gra</strong> (sunrise–sunset) and <strong>Magen&nbsp;Avraham</strong> (72-minute dawn to nightfall).
     Candle lighting 18&nbsp;min before sunset (40&nbsp;in Jerusalem). Sea-level horizon; elevation not applied. Chatzot halayla is solar midnight; <strong>Tikkun Chatzot</strong> is given as 6&nbsp;hours after tzeit per the Magen&nbsp;Avraham, the time followed in Breslov.
-    Tachanun follows common Ashkenaz practice; minhagim vary. <strong>L'David</strong> (Ps.&nbsp;27) is shown from 1&nbsp;Elul through Shemini&nbsp;Atzeret, said twice daily — Shacharit, and Mincha or Ma'ariv by custom; some conclude at Hoshana&nbsp;Rabbah.
+    Tachanun follows common Ashkenaz practice; minhagim vary. <strong>L'David</strong> (Ps.&nbsp;27) is shown from 1&nbsp;Elul through Shemini&nbsp;Atzeret, said twice daily — at Shacharit and, per Nusach&nbsp;Sefard, at Mincha (Nusach&nbsp;Ashkenaz says the second at Ma'ariv); some conclude at Hoshana&nbsp;Rabbah.
     Yom tov days follow the Israel/diaspora setting (auto-set from your location).
     Parsha &amp; special-Shabbat schedule (through 2046) from <strong>Hebcal</strong> (hebcal.com, CC&nbsp;BY&nbsp;4.0);
     city index from <strong>GeoNames</strong> (CC&nbsp;BY&nbsp;4.0) and <strong>©&nbsp;OpenStreetMap</strong> contributors (ODbL);
@@ -995,6 +995,7 @@ function render(){
         if(fastToday && !/Yom Kippur/.test(fastToday.name)) items.push(`<b class="on">Aneinu</b>`);
         if(hp.month==="Av" && hp.day===9) items.push(`<b class="on">Nacheim</b>`);
         if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
+        if(F.ldavid) items.push(`<b class="on">L'David</b>`); // Nusach Sefard says the second at Mincha
       } else {
         items.push(`<span class="svc">Tonight</span>`);
         const om = omerDay(hp);
