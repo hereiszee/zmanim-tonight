@@ -91,6 +91,11 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .daven-strip .svc{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600}
 .daven-strip b{font-weight:600; color:var(--ink)}
 .daven-strip b.on{color:var(--gold)}
+.daven-strip .strip-open{background:none; border:none; padding:0; font:inherit; font-weight:600;
+  color:var(--gold); cursor:pointer; text-decoration:underline; text-decoration-style:dotted;
+  text-underline-offset:3px}
+.daven-strip .strip-open:hover{text-decoration-style:solid}
+.daven-strip .strip-open:focus-visible{outline:2px solid var(--gold); outline-offset:3px; border-radius:3px}
 .next .lbl{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
 .next .lbl::before{content:""; display:inline-block; width:9px; height:9px; border-radius:50%;
   background:var(--gold); margin-right:.5rem; vertical-align:baseline}
@@ -988,6 +993,7 @@ function render(){
     if(!live || !z.sunrise || !z.tzeit){ el.hidden = true; el.innerHTML = ""; }
     else {
       const F = davenFacts || {};
+      const LDAVID_BTN = `<button type="button" class="learn-link strip-open" data-kind="ps27">L'David</button>`;
       const tT = tachanunFor(today), tN = tachanunFor(addDays(today,1));
       const items = [];
       if(now < z.chatzot){
@@ -996,7 +1002,7 @@ function render(){
         if(F.hallel && F.hallel!=="—") items.push(`<b class="on">Hallel — ${F.hallel.toLowerCase()}</b>`);
         if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
         if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
-        if(F.ldavid) items.push(`<b class="on">L'David</b>`);
+        if(F.ldavid) items.push(LDAVID_BTN);
       } else if(now < z.tzeit){
         const omit = tT.omit || tN.omit;
         items.push(`<span class="svc">Mincha</span>`);
@@ -1005,7 +1011,7 @@ function render(){
         if(fastToday && !/Yom Kippur/.test(fastToday.name)) items.push(`<b class="on">Aneinu</b>`);
         if(hp.month==="Av" && hp.day===9) items.push(`<b class="on">Nacheim</b>`);
         if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
-        if(F.ldavid) items.push(`<b class="on">L'David</b>`); // Nusach Sefard says the second at Mincha
+        if(F.ldavid) items.push(LDAVID_BTN); // Nusach Sefard says the second at Mincha
       } else {
         items.push(`<span class="svc">Tonight</span>`);
         const om = omerDay(hp);
