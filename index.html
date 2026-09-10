@@ -352,7 +352,7 @@ footer strong{color:var(--ink)}
     Dawn is <strong>16.1°</strong> below the horizon, nightfall (tzeit) <strong>8.5°</strong>, Rabbeinu&nbsp;Tam 72&nbsp;minutes.
     Sha'ot zmaniyot per the <strong>Gra</strong> (sunrise–sunset) and <strong>Magen&nbsp;Avraham</strong> (72-minute dawn to nightfall).
     Candle lighting 18&nbsp;min before sunset (40&nbsp;in Jerusalem). Sea-level horizon; elevation not applied. Chatzot halayla is solar midnight; <strong>Tikkun Chatzot</strong> is given as 6&nbsp;hours after tzeit per the Magen&nbsp;Avraham, the time followed in Breslov.
-    Tachanun follows common Ashkenaz practice; minhagim vary. <strong>L'David</strong> (Ps.&nbsp;27) is shown from 1&nbsp;Elul through Shemini&nbsp;Atzeret, said twice daily — at Shacharit and, per Nusach&nbsp;Sefard, at Mincha (Nusach&nbsp;Ashkenaz says the second at Ma'ariv); some conclude at Hoshana&nbsp;Rabbah.
+    Tachanun follows the rules used by <strong>istheretachanuntoday.com</strong> (Peninei Halakhah, Prayer 21:7); minhagim vary. <strong>L'David</strong> (Ps.&nbsp;27) is shown from 1&nbsp;Elul through Shemini&nbsp;Atzeret, said twice daily — at Shacharit and, per Nusach&nbsp;Sefard, at Mincha (Nusach&nbsp;Ashkenaz says the second at Ma'ariv); some conclude at Hoshana&nbsp;Rabbah.
     Yom tov days follow the Israel/diaspora setting (auto-set from your location).
     Parsha &amp; special-Shabbat schedule (through 2046) from <strong>Hebcal</strong> (hebcal.com, CC&nbsp;BY&nbsp;4.0);
     city index from <strong>GeoNames</strong> (CC&nbsp;BY&nbsp;4.0) and <strong>©&nbsp;OpenStreetMap</strong> contributors (ODbL);
@@ -484,40 +484,63 @@ function isChanukah(ymd){ // 8 days from 25 Kislev — scan back over civil days
   return false;
 }
 // Returns {omit, reason, note} for the civil day ymd
+/* One rule table, mirroring istheretachanuntoday.com (sources: Peninei Halakhah,
+   Prayer 21:7). back = the omission also drops tachanun at the previous day's
+   Mincha. An optional sixth column is the wording used in Israel. */
+const TACHANUN_RULES = [
+  ["Tishri", 1, 2, "Rosh Hashanah", false],
+  ["Tishri", 9, 9, "Erev Yom Kippur", false],
+  ["Tishri",10,10, "Yom Kippur", false],
+  ["Tishri",11,14, "between Yom Kippur and Sukkot", false],
+  ["Tishri",15,21, "Sukkot", false],
+  ["Tishri",22,22, "Shemini Atzeret", false, "Shemini Atzeret / Simchat Torah"],
+  ["Tishri",23,23, "Simchat Torah", false, "after Sukkot, until Rosh Chodesh"],
+  ["Tishri",24,29, "after Sukkot, until Rosh Chodesh", false],
+  ["Kislev",25,30, "Chanukah", true],
+  ["Tevet",  1, 2, "Chanukah", false],
+  ["Shevat",15,15, "Tu BiShvat", true],
+  ["Adar",  14,14, "Purim", true],
+  ["Adar",  15,15, "Shushan Purim", false],
+  ["Adar I",14,14, "Purim Katan", true],
+  ["Adar I",15,15, "Shushan Purim Katan", false],
+  ["Adar II",14,14,"Purim", true],
+  ["Adar II",15,15,"Shushan Purim", false],
+  ["Nisan", 2,14, "the month of Nisan", false],
+  ["Nisan",15,21, "Pesach", true],
+  ["Nisan",22,22, "Pesach", true, "the month of Nisan"],
+  ["Nisan",23,29, "the month of Nisan", false],
+  ["Iyar", 14,14, "Pesach Sheni", true],
+  ["Iyar", 18,18, "Lag BaOmer", true],
+  ["Iyar", 28,28, "Yom Yerushalayim", true],
+  ["Sivan", 2, 2, "Yom HaMeyuchas", false],
+  ["Sivan", 3, 5, "the three days of hagbalah", false],
+  ["Sivan", 6, 6, "Shavuot", false],
+  ["Sivan", 7, 7, "Shavuot", false, "the week after Shavuot"],
+  ["Sivan", 8,12, "the week after Shavuot", false],
+  ["Av",   15,15, "Tu B'Av", true],
+  ["Elul", 29,29, "Erev Rosh Hashanah", false],
+];
+const TACHANUN_NOTES = {"Pesach Sheni":"minhag varies", "Yom Yerushalayim":"minhag varies", "Yom Ha'atzmaut":"minhag varies"};
 function tachanunFor(ymd){
   const hp = hebrewParts(noonUTC(ymd));
-  const wd = new Intl.DateTimeFormat("en-US",{timeZone:"UTC",weekday:"short"}).format(noonUTC(ymd));
   const M = hp.month, D = hp.day;
-  const no = (reason, note) => ({omit:true, reason, note});
-  // Erev Rosh Hashanah and Erev Yom Kippur omit tachanun for the day itself, but
-  // unlike festive days they don't reach back to the previous Mincha — tachanun is
-  // said at Mincha on 28 Elul and on 8 Tishrei. `back:false` marks that.
-  const noSelfOnly = reason => ({omit:true, reason, back:false});
-  if(wd==="Sat") return no("Shabbat");
-  if(M==="Tishri"){
-    if(D<=2) return no("Rosh Hashanah");
-    if(D===9) return noSelfOnly("Erev Yom Kippur");
-    if(D===10) return no("Yom Kippur");
-    if(D>=11) return no(D>=15&&D<=23 ? "Sukkot / Shemini Atzeret" : "after Yom Kippur — rest of Tishrei");
+  const wdOf = y => new Intl.DateTimeFormat("en-US",{timeZone:"UTC",weekday:"short"}).format(noonUTC(y));
+  const wd = wdOf(ymd);
+  const no = (reason, back) => ({omit:true, reason, back, note:TACHANUN_NOTES[reason]});
+  const r = TACHANUN_RULES.find(([m,a,b]) => m===M && D>=a && D<=b);
+  if(r) return no((loc.israel && r[5]) || r[3], r[4]);
+  if(D===1)  return no("Rosh Chodesh "+M, true);
+  if(D===30) return no("Rosh Chodesh "+hebrewParts(noonUTC(addDays(ymd,1))).month, true); // coming month's RC
+  if(wd==="Sat") return no("Shabbat", true);
+  if(isChanukah(ymd)) return no("Chanukah", false);                  // 3 Tevet when Kislev is short
+  if(M==="Iyar" && D>=3 && D<=6){                                    // Yom Ha'atzmaut moves off Mon/Fri/Sat
+    const w5 = wdOf(addDays(ymd, 5-D));
+    if(D === (w5==="Fri" ? 4 : w5==="Sat" ? 3 : w5==="Mon" ? 6 : 5)) return no("Yom Ha'atzmaut", true);
   }
-  if(M==="Nisan") return no("the month of Nisan");
-  if(M==="Iyar"){
-    if(D===5) return no("Yom Ha'atzmaut","minhag varies");
-    if(D===14) return no("Pesach Sheni","minhag varies");
-    if(D===18) return no("Lag BaOmer");
-    if(D===28) return no("Yom Yerushalayim","minhag varies");
-  }
-  if(M==="Sivan" && D<=12) return no(D<=7 ? "Shavuot season" : "days of tashlumin after Shavuot");
-  if(M==="Av" && D===9) return no("Tisha B'Av");
-  if(M==="Av" && D===15) return no("Tu B'Av");
-  if(M==="Elul" && D===29) return noSelfOnly("Erev Rosh Hashanah");
-  if(M==="Shevat" && D===15) return no("Tu BiShvat");
-  if((M==="Adar"||M==="Adar II") && (D===14||D===15)) return no(D===14?"Purim":"Shushan Purim");
-  if(M==="Adar I" && (D===14||D===15)) return no("Purim Katan");
-  if(isChanukah(ymd)) return no("Chanukah");
-  if(D===1) return no("Rosh Chodesh "+M);
-  // day 30 is the first day of the *coming* month's Rosh Chodesh
-  if(D===30) return no("Rosh Chodesh "+hebrewParts(noonUTC(addDays(ymd,1))).month);
+  if(M==="Av" && ((D===9 && wd!=="Sat") || (D===10 && wd==="Sun"))) return no("Tisha B'Av", true); // incl. nidcheh
+  if(loc.israel && /jerusalem/i.test(loc.name||"") && (M==="Adar"||M==="Adar II") && D===16 && wd==="Sun")
+    return no("Purim Meshulash", false);
+  if(!loc.israel && M==="Sivan" && D===13) return no("the week after Shavuot", false);
   return {omit:false, reason:""};
 }
 // Does tomorrow's omission also drop tachanun at today's Mincha?
