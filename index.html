@@ -489,10 +489,14 @@ function tachanunFor(ymd){
   const wd = new Intl.DateTimeFormat("en-US",{timeZone:"UTC",weekday:"short"}).format(noonUTC(ymd));
   const M = hp.month, D = hp.day;
   const no = (reason, note) => ({omit:true, reason, note});
+  // Erev Rosh Hashanah and Erev Yom Kippur omit tachanun for the day itself, but
+  // unlike festive days they don't reach back to the previous Mincha — tachanun is
+  // said at Mincha on 28 Elul and on 8 Tishrei. `back:false` marks that.
+  const noSelfOnly = reason => ({omit:true, reason, back:false});
   if(wd==="Sat") return no("Shabbat");
   if(M==="Tishri"){
     if(D<=2) return no("Rosh Hashanah");
-    if(D===9) return no("Erev Yom Kippur");
+    if(D===9) return noSelfOnly("Erev Yom Kippur");
     if(D===10) return no("Yom Kippur");
     if(D>=11) return no(D>=15&&D<=23 ? "Sukkot / Shemini Atzeret" : "after Yom Kippur — rest of Tishrei");
   }
@@ -506,14 +510,18 @@ function tachanunFor(ymd){
   if(M==="Sivan" && D<=12) return no(D<=7 ? "Shavuot season" : "days of tashlumin after Shavuot");
   if(M==="Av" && D===9) return no("Tisha B'Av");
   if(M==="Av" && D===15) return no("Tu B'Av");
-  if(M==="Elul" && D===29) return no("Erev Rosh Hashanah");
+  if(M==="Elul" && D===29) return noSelfOnly("Erev Rosh Hashanah");
   if(M==="Shevat" && D===15) return no("Tu BiShvat");
   if((M==="Adar"||M==="Adar II") && (D===14||D===15)) return no(D===14?"Purim":"Shushan Purim");
   if(M==="Adar I" && (D===14||D===15)) return no("Purim Katan");
   if(isChanukah(ymd)) return no("Chanukah");
-  if(D===30 || D===1) return no("Rosh Chodesh "+M);
+  if(D===1) return no("Rosh Chodesh "+M);
+  // day 30 is the first day of the *coming* month's Rosh Chodesh
+  if(D===30) return no("Rosh Chodesh "+hebrewParts(noonUTC(addDays(ymd,1))).month);
   return {omit:false, reason:""};
 }
+// Does tomorrow's omission also drop tachanun at today's Mincha?
+const eveOmits = t => t.omit && t.back !== false;
 
 /* ---------- luach dataset (Hebcal-sourced holidays, fasts, daf yomi) ---------- */
 const LU = window.__LUACH || {names:[],d:[],il:[],daf:[]};
@@ -705,11 +713,11 @@ function render(){
   const sv = $("tach-shacharit"), mv = $("tach-mincha");
   sv.className = "verdict " + (tToday.omit ? "omit" : "said");
   sv.innerHTML = tToday.omit ? `Omitted<small>${tToday.reason}</small>` : "Said";
-  const minchaOmit = tToday.omit || tNext.omit;
+  const minchaOmit = tToday.omit || eveOmits(tNext);
   mv.className = "verdict " + (minchaOmit ? "omit" : "said");
   mv.innerHTML = !minchaOmit ? "Said" :
     tToday.omit ? `Omitted<small>${tToday.reason}</small>` : `Omitted<small>eve of ${tNext.reason}</small>`;
-  $("tach-note").textContent = (tToday.note || (tNext.omit && tNext.note)) ?
+  $("tach-note").textContent = (tToday.note || (eveOmits(tNext) && tNext.note)) ?
     "Minhagim vary for this day — follow your community's practice." : "";
 
   // Parsha of the coming Shabbat (location-aware: Israel and diaspora schedules differ some years)
@@ -1004,7 +1012,7 @@ function render(){
         if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
         if(F.ldavid) items.push(LDAVID_BTN);
       } else if(now < z.tzeit){
-        const omit = tT.omit || tN.omit;
+        const omit = tT.omit || eveOmits(tN);
         items.push(`<span class="svc">Mincha</span>`);
         items.push(`<b class="${omit?"on":""}">Tachanun ${omit?"omitted":"said"}</b>`);
         if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
