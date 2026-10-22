@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Zmanim Tonight</title>
+<title>Zmanim</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -245,7 +245,7 @@ footer strong{color:var(--ink)}
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Zmanim tonight</div>
+    <div class="eyebrow">Zmanim</div>
     <h1 class="hdate serif"><span id="hdate-en">—</span><span class="heb serif" id="hdate-he"></span></h1>
     <div class="sub"><span id="gdate">—</span> <span class="roll" id="rollnote"></span></div>
     <div class="loc-line" id="loc-line">—</div>
@@ -833,7 +833,11 @@ function render(){
     // L'David Hashem Ori (Ps. 27) — twice daily from 1 Elul through Shemini Atzeret.
     // 22 Tishrei is Shemini Atzeret in both zones, so one rule reads right in each.
     const ldavid = hp.month==="Elul" || (hp.month==="Tishri" && hp.day<=22);
-    davenFacts = {yvy, hallel, alhanissim, ldavid};
+    // First night of the she'elah: 7 Cheshvan in Israel; Dec 5 (Dec 6 before a civil leap year) in the diaspora
+    const talFirst = loc.israel
+      ? key===K("Heshvan",7)
+      : rolledCivil.m===12 && rolledCivil.d===talStart;
+    davenFacts = {yvy, hallel, alhanissim, ldavid, talFirst};
     const dv = [];
     const row = (l,v,on)=>dv.push(`<div class="dv${on?" on":""}"><span>${l}</span><span class="v">${v}</span></div>`);
     row("Ya'aleh V'Yavo", yvy?"Said":"—", yvy);
@@ -1052,6 +1056,7 @@ function render(){
           items.push(`<b class="on">Ya'aleh V'Yavo${which?` — ${which.name}`:""}</b>`);
         }
         if(isChanukah(rolled)) items.push(`<b class="on">Al HaNissim</b>`);
+        if(F.talFirst) items.push(`<b class="on">begin V'Ten Tal U'Matar</b>`);
         const seder = hp.month==="Nisan" && (hp.day===15 || (!loc.israel && hp.day===16));
         if(items.length===1) items.push(`<b>regular Ma'ariv</b>`);
         if(z.chatzotNight)

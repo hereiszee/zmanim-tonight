@@ -1,4 +1,4 @@
-# Zmanim Tonight
+# Zmanim
 
 A single-file, offline-capable zmanim dashboard: Hebrew date (with sunset rollover), halachic times for any location, tachanun (shacharit & mincha), parsha of the week (Israel & diaspora schedules), special Shabbatot, chag-aware candle lighting & havdalah, and the phase of the moon.
 
