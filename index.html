@@ -48,12 +48,12 @@ body{
 header{display:flex; flex-direction:column; gap:.2rem; padding:.2rem .1rem .4rem}
 .eyebrow{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
 h1.hdate{font-size:clamp(1.7rem,5.4vw,2.5rem); margin:0; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
-h1 .heb{color:var(--gold); margin-left:.45rem}
+h1 .heb{color:var(--gold); margin-inline-start:.45rem}
 .sub{color:var(--ink-dim); font-size:.93rem}
 .sub .roll{color:var(--gold)}
 .loc-line{margin-top:.3rem; font-size:.9rem; font-weight:600; color:var(--ink-dim)}
 .loc-line::before{content:""; display:inline-block; width:8px; height:8px; border-radius:50%;
-  background:var(--gold); margin-right:.45rem; vertical-align:baseline}
+  background:var(--gold); margin-inline-end:.45rem; vertical-align:baseline}
 #holiday-slot{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.55rem}
 .holiday{display:inline-block; background:var(--panel); border:1px solid var(--line); border-radius:999px;
   padding:.2rem .7rem; font-size:.78rem; font-weight:600}
@@ -98,7 +98,7 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .daven-strip .strip-open:focus-visible{outline:2px solid var(--gold); outline-offset:3px; border-radius:3px}
 .next .lbl{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); font-weight:600}
 .next .lbl::before{content:""; display:inline-block; width:9px; height:9px; border-radius:50%;
-  background:var(--gold); margin-right:.5rem; vertical-align:baseline}
+  background:var(--gold); margin-inline-end:.5rem; vertical-align:baseline}
 .next .when{font-variant-numeric:tabular-nums; font-weight:700; color:var(--ink);
   font-size:clamp(2.3rem,8vw,3.1rem); line-height:1.12; letter-spacing:-.015em}
 .next .what{font-size:1.08rem; font-weight:600}
@@ -117,7 +117,7 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
   padding:.34rem 0; border-bottom:1px solid var(--line)}
 .tach-row:last-of-type{border-bottom:none}
 .tach-row .tl{color:var(--ink-dim); font-size:.9rem}
-.verdict{font-weight:600; font-size:.95rem; text-align:right}
+.verdict{font-weight:600; font-size:.95rem; text-align:end}
 .verdict.omit{color:var(--good)}
 .verdict.said{color:var(--ink)}
 .verdict small{display:block; font-weight:400; font-size:.75rem; color:var(--ink-dim)}
@@ -139,8 +139,8 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .zman{display:flex; justify-content:space-between; align-items:baseline; gap:.6rem;
   padding:.5rem 0; border-bottom:1px solid var(--line); position:relative}
 .zman.passed{opacity:.45}
-.zman.hero{padding-left:.9rem}
-.zman.hero::before{content:""; position:absolute; left:0; top:.95rem; width:8px; height:8px;
+.zman.hero{padding-inline-start:.9rem}
+.zman.hero::before{content:""; position:absolute; inset-inline-start:0; top:.95rem; width:8px; height:8px;
   border-radius:50%; background:var(--gold)}
 .zman .name{font-size:.92rem}
 .zman .name small{display:block; color:var(--ink-dim); font-size:.72rem}
@@ -160,13 +160,13 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .custom-form select{width:auto; max-width:14rem}
 .city-box{position:relative; display:inline-block}
 .city-box input{width:13rem; cursor:text}
-.city-results{position:absolute; top:calc(100% + 5px); left:0; min-width:15rem; z-index:5;
+.city-results{position:absolute; top:calc(100% + 5px); inset-inline-start:0; min-width:15rem; z-index:5;
   background:var(--panel); border:1px solid var(--line); border-radius:12px;
   max-height:260px; overflow:auto; box-shadow:0 12px 32px rgba(0,0,0,.18)}
-.city-results button{display:block; width:100%; text-align:left; background:none; border:none;
+.city-results button{display:block; width:100%; text-align:start; background:none; border:none;
   color:var(--ink); padding:.45rem .8rem; font:inherit; cursor:pointer}
 .city-results button:hover,.city-results button:focus-visible{background:var(--bg)}
-.city-results .cc{color:var(--ink-dim); font-size:.8rem; margin-left:.4rem}
+.city-results .cc{color:var(--ink-dim); font-size:.8rem; margin-inline-start:.4rem}
 .il-toggle{display:inline-flex; align-items:center; gap:.4rem; cursor:pointer; user-select:none}
 .il-toggle input{accent-color:var(--gold)}
 
@@ -177,16 +177,16 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .dv{display:flex; justify-content:space-between; gap:.6rem; padding:.26rem 0;
   font-size:.9rem; color:var(--ink-dim); border-bottom:1px solid var(--line)}
 .dv:last-of-type{border-bottom:none}
-.dv .v{text-align:right; font-weight:600}
+.dv .v{text-align:end; font-weight:600}
 .dv.on{color:var(--ink)}
 .dv.on .v{color:var(--gold)}
-.learn-link{background:none; border:none; color:var(--ink); font:inherit; cursor:pointer; padding:0; text-align:left}
+.learn-link{background:none; border:none; color:var(--ink); font:inherit; cursor:pointer; padding:0; text-align:start}
 .learn-link strong{color:var(--gold)}
 .learn-link:hover strong{text-decoration:underline; text-underline-offset:3px}
 .learn-out{color:var(--ink); text-decoration:none}
 .learn-out:hover{color:var(--gold)}
 .haman-card h2::before{content:""; display:inline-block; width:8px; height:8px; border-radius:50%;
-  background:var(--gold); margin-right:.5rem; vertical-align:baseline}
+  background:var(--gold); margin-inline-end:.5rem; vertical-align:baseline}
 .haman-btn{font-size:1.05rem}
 .haman-btn strong{font-size:1.3rem}
 .sulam-slot{margin:.4rem 0 1rem}
@@ -225,7 +225,7 @@ h1 .heb{color:var(--gold); margin-left:.45rem}
 .rd-out{color:var(--ink); margin:1.2rem 0 .4rem}
 .rd-out h1{font-size:1rem; margin:0; color:var(--ink); font-weight:700}
 .rd-out h1::before{content:""; display:inline-block; width:8px; height:8px; border-radius:50%;
-  background:var(--gold); margin-right:.5rem}
+  background:var(--gold); margin-inline-end:.5rem}
 .rd-out small{color:var(--ink-dim); font-size:.85rem; line-height:1.7}
 .rd-chok{font-size:1.25rem}
 .rd-man{margin-bottom:.15rem}
@@ -241,11 +241,31 @@ footer strong{color:var(--ink)}
 @media (prefers-reduced-motion: no-preference){
   .band .now{transition:left 60s linear}
 }
+
+/* English / Hebrew. Static copy carries both spans; the root lang picks one. */
+html:not([lang="he"]) .lang-he, html[lang="he"] .lang-en{display:none!important}
+html[lang="he"] *{letter-spacing:0!important}   /* tracking is for Latin caps, not Hebrew */
+html[lang="he"] .eyebrow, html[lang="he"] .mini-card h2, html[lang="he"] .next .lbl,
+html[lang="he"] .daven-strip .svc, html[lang="he"] .rd-amud{font-size:.8rem}
+html[lang="he"] .rd-tr{display:none}            /* English translations in the readers */
+.topline{display:flex; justify-content:space-between; align-items:center; gap:.6rem}
+.langsw{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden;
+  background:var(--panel); box-shadow:var(--shadow)}
+.langsw button{background:none; border:none; color:var(--ink-dim); font:inherit; font-size:.74rem;
+  font-weight:600; padding:.24rem .75rem; cursor:pointer; line-height:1.3}
+.langsw button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+.langsw button:focus-visible{outline:2px solid var(--gold); outline-offset:-2px}
 </style>
+<script>try{if(localStorage.getItem("zmanim-lang")==="he"){document.documentElement.lang="he";document.documentElement.dir="rtl";}}catch(e){}</script>
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Zmanim</div>
+    <div class="topline">
+      <div class="eyebrow"><span class="lang-en">Zmanim</span><span class="lang-he">זמנים</span></div>
+      <div class="langsw" role="group" aria-label="Language / שפה">
+        <button type="button" data-setlang="en" lang="en">EN</button><button type="button" data-setlang="he" lang="he">עב</button>
+      </div>
+    </div>
     <h1 class="hdate serif"><span id="hdate-en">—</span><span class="heb serif" id="hdate-he"></span></h1>
     <div class="sub"><span id="gdate">—</span> <span class="roll" id="rollnote"></span></div>
     <div class="loc-line" id="loc-line">—</div>
@@ -256,12 +276,12 @@ footer strong{color:var(--ink)}
     <button id="dn-prev" type="button" aria-label="Previous day">◀</button>
     <input id="dn-date" type="date" min="2025-01-01" max="2046-12-31" aria-label="Choose a date">
     <button id="dn-next" type="button" aria-label="Next day">▶</button>
-    <button id="dn-today" type="button" hidden>Back to today</button>
+    <button id="dn-today" type="button" hidden><span class="lang-en">Back to today</span><span class="lang-he">חזרה להיום</span></button>
   </div>
 
   <div class="next" id="next-card">
     <div class="next-text">
-      <div class="lbl">Next</div>
+      <div class="lbl"><span class="lang-en">Next</span><span class="lang-he">הבא</span></div>
       <div class="when" id="next-time">—</div>
       <div class="whatline"><span class="what" id="next-name">—</span> <span class="in" id="next-in"></span></div>
       <div class="then" id="then-line"></div>
@@ -274,7 +294,7 @@ footer strong{color:var(--ink)}
 
   <div class="duo">
     <div class="mini-card">
-      <h2>This Shabbat</h2>
+      <h2><span class="lang-en">This Shabbat</span><span class="lang-he">השבת</span></h2>
       <div class="parsha-name serif" id="parsha-name">—</div>
       <div class="mini-note" id="parsha-date"></div>
       <div id="parsha-special"></div>
@@ -282,25 +302,25 @@ footer strong{color:var(--ink)}
       <div class="mini-note mevarchim" id="mevarchim-line"></div>
     </div>
     <div class="mini-card">
-      <h2>Today &amp; tonight</h2>
+      <h2><span class="lang-en">Today &amp; tonight</span><span class="lang-he">היום והלילה</span></h2>
       <div id="today-lines" class="tl-list"></div>
     </div>
     <div class="mini-card">
-      <h2>Tachanun today</h2>
-      <div class="tach-row"><span class="tl">Shacharit</span><span class="verdict" id="tach-shacharit">—</span></div>
-      <div class="tach-row"><span class="tl">Mincha</span><span class="verdict" id="tach-mincha">—</span></div>
+      <h2><span class="lang-en">Tachanun today</span><span class="lang-he">תחנון היום</span></h2>
+      <div class="tach-row"><span class="tl"><span class="lang-en">Shacharit</span><span class="lang-he">שחרית</span></span><span class="verdict" id="tach-shacharit">—</span></div>
+      <div class="tach-row"><span class="tl"><span class="lang-en">Mincha</span><span class="lang-he">מנחה</span></span><span class="verdict" id="tach-mincha">—</span></div>
       <div class="mini-note" id="tach-note"></div>
     </div>
     <div class="mini-card">
-      <h2>In davening</h2>
+      <h2><span class="lang-en">In davening</span><span class="lang-he">בתפילה</span></h2>
       <div id="daven-lines" class="tl-list"></div>
     </div>
     <div class="mini-card">
-      <h2>Learning</h2>
+      <h2><span class="lang-en">Learning</span><span class="lang-he">לימוד</span></h2>
       <div id="learn-lines" class="tl-list"></div>
     </div>
     <div class="mini-card moon-card">
-      <h2>The moon</h2>
+      <h2><span class="lang-en">The moon</span><span class="lang-he">הירח</span></h2>
       <div class="moon-flex">
         <div id="moon-svg"></div>
         <div><div class="moon-name" id="moon-name">—</div><div class="mini-note" id="moon-detail"></div></div>
@@ -322,32 +342,45 @@ footer strong{color:var(--ink)}
 
 
   <div class="mini-card haman-card">
-    <h2>Segulah reading</h2>
+    <h2><span class="lang-en">Segulah reading</span><span class="lang-he">סגולה</span></h2>
     <button type="button" class="learn-link haman-btn" data-kind="haman">
-      <strong class="serif">פרשת המן</strong> — Parshat HaMan with Targum</button>
-    <div class="mini-note">Shemot 16:4–36, with te'amim · pasuk by pasuk with Targum Onkelos (shnayim mikra ve'echad targum)</div>
+      <strong class="serif">פרשת המן</strong> — <span class="lang-en">Parshat HaMan with Targum</span><span class="lang-he">עם תרגום אונקלוס</span></button>
+    <div class="mini-note"><span class="lang-en">Shemot 16:4–36, with te'amim · pasuk by pasuk with Targum Onkelos (shnayim mikra ve'echad targum)</span><span class="lang-he">שמות ט״ז, ד׳–ל״ו, בטעמי המקרא · פסוק אחר פסוק עם תרגום אונקלוס (שניים מקרא ואחד תרגום)</span></div>
   </div>
 
   <div class="loc">
-    <span id="loc-label">Location:</span>
+    <span id="loc-label"></span>
     <span class="city-box">
       <input id="city-search" type="search" placeholder="Search any city…" autocomplete="off" aria-label="Search city">
       <div id="city-results" class="city-results" hidden></div>
     </span>
     <select id="loc-select" aria-label="Choose location"></select>
     <button id="loc-geo" type="button">Use my location</button>
-    <button id="loc-custom-toggle" type="button">Enter coordinates…</button>
-    <label class="il-toggle"><input type="checkbox" id="il-check"> Israel schedule (one-day chag)</label>
+    <button id="loc-custom-toggle" type="button"><span class="lang-en">Enter coordinates…</span><span class="lang-he">הזנת קואורדינטות…</span></button>
+    <label class="il-toggle"><input type="checkbox" id="il-check"> <span class="lang-en">Israel schedule (one-day chag)</span><span class="lang-he">לוח ארץ ישראל (יום טוב אחד)</span></label>
   </div>
   <form class="loc custom-form" id="custom-form" hidden>
-    <label>Lat <input id="c-lat" type="number" step="any" min="-89.9" max="89.9" required></label>
-    <label>Lon <input id="c-lon" type="number" step="any" min="-180" max="180" required></label>
-    <label>Time zone <select id="c-tz"></select></label>
-    <label>Candles <input id="c-candles" type="number" min="0" max="60" value="18" style="width:4.2rem"> min</label>
-    <button type="submit">Apply</button>
+    <label><span class="lang-en">Lat</span><span class="lang-he">קו רוחב</span> <input id="c-lat" type="number" step="any" min="-89.9" max="89.9" required></label>
+    <label><span class="lang-en">Lon</span><span class="lang-he">קו אורך</span> <input id="c-lon" type="number" step="any" min="-180" max="180" required></label>
+    <label><span class="lang-en">Time zone</span><span class="lang-he">אזור זמן</span> <select id="c-tz"></select></label>
+    <label><span class="lang-en">Candles</span><span class="lang-he">הדלקת נרות</span> <input id="c-candles" type="number" min="0" max="60" value="18" style="width:4.2rem"> <span class="lang-en">min</span><span class="lang-he">דק׳</span></label>
+    <button type="submit"><span class="lang-en">Apply</span><span class="lang-he">החל</span></button>
   </form>
 
   <footer>
+    <div class="lang-he">
+    מחושב בדפדפן שלך לפי האלגוריתם הסולארי של NOAA — שום מידע לא יוצא מהדף.
+    עלות השחר <strong>16.1°</strong> מתחת לאופק, צאת הכוכבים <strong>8.5°</strong>, רבנו&nbsp;תם 72&nbsp;דקות.
+    שעות זמניות לפי <strong>הגר״א</strong> (מהנץ עד השקיעה) ולפי <strong>המגן&nbsp;אברהם</strong> (מעלות השחר של 72 דקות עד צאת הכוכבים).
+    הדלקת נרות 18&nbsp;דקות לפני השקיעה (40 בירושלים). אופק בגובה פני הים; הגובה אינו מחושב. חצות הלילה הוא חצות השמש; <strong>תיקון חצות</strong> מוצג 6&nbsp;שעות אחרי צאת הכוכבים לפי המגן&nbsp;אברהם, כנהוג בברסלב.
+    דיני תחנון לפי הכללים של <strong>istheretachanuntoday.com</strong> (פניני הלכה, תפילה כא, ז); המנהגים חלוקים. <strong>לדוד ה׳ אורי</strong> (תהלים כ״ז) מוצג מראש חודש אלול עד שמיני&nbsp;עצרת, פעמיים ביום — בשחרית, ולפי נוסח&nbsp;ספרד במנחה (בנוסח&nbsp;אשכנז הפעם השנייה בערבית); יש המסיימים בהושענא&nbsp;רבה.
+    ימים טובים לפי הגדרת ארץ ישראל / חוץ לארץ (נקבעת אוטומטית לפי המיקום).
+    לוח הפרשיות והשבתות המיוחדות (עד 2046) מ־<strong>Hebcal</strong> (hebcal.com, CC&nbsp;BY&nbsp;4.0);
+    אינדקס המקומות מ־<strong>GeoNames</strong> (CC&nbsp;BY&nbsp;4.0) ומ־<strong>©&nbsp;OpenStreetMap</strong> contributors (ODbL);
+    הטקסטים בחלון הקריאה מ־<strong>ספריא</strong>.
+    הזמנים הם קירוב — להלכה למעשה יש להיוועץ ברב המקומי ובלוח מוסמך.
+    </div>
+    <div class="lang-en">
     Computed in your browser with the NOAA solar algorithm — no data leaves this page.
     Dawn is <strong>16.1°</strong> below the horizon, nightfall (tzeit) <strong>8.5°</strong>, Rabbeinu&nbsp;Tam 72&nbsp;minutes.
     Sha'ot zmaniyot per the <strong>Gra</strong> (sunrise–sunset) and <strong>Magen&nbsp;Avraham</strong> (72-minute dawn to nightfall).
@@ -358,6 +391,7 @@ footer strong{color:var(--ink)}
     city index from <strong>GeoNames</strong> (CC&nbsp;BY&nbsp;4.0) and <strong>©&nbsp;OpenStreetMap</strong> contributors (ODbL);
     texts in the reader from <strong>Sefaria</strong>.
     Times are approximations — for practical halacha, confirm with your local rav and published luach.
+    </div>
   </footer>
 </div>
 
@@ -406,17 +440,93 @@ function sunTime(y,m,d,lat,lon,zenith,rising){
 
 /* ---------- locations ---------- */
 const PRESETS = [
-  {id:"jer", name:"Jerusalem", lat:31.778, lon:35.235, tz:"Asia/Jerusalem", candles:40, israel:true},
-  {id:"nyc", name:"New York", lat:40.713, lon:-74.006, tz:"America/New_York", candles:18},
-  {id:"la",  name:"Los Angeles", lat:34.052, lon:-118.244, tz:"America/Los_Angeles", candles:18},
-  {id:"chi", name:"Chicago", lat:41.878, lon:-87.630, tz:"America/Chicago", candles:18},
-  {id:"lon", name:"London", lat:51.507, lon:-0.128, tz:"Europe/London", candles:18},
-  {id:"mel", name:"Melbourne", lat:-37.814, lon:144.963, tz:"Australia/Melbourne", candles:18},
-  {id:"tor", name:"Toronto", lat:43.651, lon:-79.383, tz:"America/Toronto", candles:18},
+  {id:"jer", name:"Jerusalem", he:"ירושלים", lat:31.778, lon:35.235, tz:"Asia/Jerusalem", candles:40, israel:true},
+  {id:"nyc", name:"New York", he:"ניו יורק", lat:40.713, lon:-74.006, tz:"America/New_York", candles:18},
+  {id:"la",  name:"Los Angeles", he:"לוס אנג׳לס", lat:34.052, lon:-118.244, tz:"America/Los_Angeles", candles:18},
+  {id:"chi", name:"Chicago", he:"שיקגו", lat:41.878, lon:-87.630, tz:"America/Chicago", candles:18},
+  {id:"lon", name:"London", he:"לונדון", lat:51.507, lon:-0.128, tz:"Europe/London", candles:18},
+  {id:"mel", name:"Melbourne", he:"מלבורן", lat:-37.814, lon:144.963, tz:"Australia/Melbourne", candles:18},
+  {id:"tor", name:"Toronto", he:"טורונטו", lat:43.651, lon:-79.383, tz:"America/Toronto", candles:18},
 ];
 let loc = null;
 try{ loc = JSON.parse(localStorage.getItem("zmanim-loc")||"null"); }catch(e){}
 if(!loc) loc = PRESETS[1];
+
+/* ---------- language: English / Hebrew (full UI, mirrored RTL) ---------- */
+// Internal logic keeps English names (they key the rule tables); translation happens at display.
+let LANG = "en";
+try{ LANG = localStorage.getItem("zmanim-lang")==="he" ? "he" : "en"; }catch(e){}
+const L = (en, he) => LANG==="he" ? he : en;
+const locTag = () => LANG==="he" ? "he-IL" : undefined;
+const HE_MONTH = {Tishri:"תשרי", Heshvan:"חשוון", Kislev:"כסלו", Tevet:"טבת", Shevat:"שבט", Adar:"אדר",
+  "Adar I":"אדר א׳", "Adar II":"אדר ב׳", Nisan:"ניסן", Iyar:"אייר", Sivan:"סיוון", Tamuz:"תמוז", Av:"אב", Elul:"אלול",
+  Tishrei:"תשרי", Cheshvan:"חשוון", "Sh'vat":"שבט", Iyyar:"אייר", Tammuz:"תמוז"}; // + Hebcal spellings
+const heMonth = m => HE_MONTH[m] || m;
+const HE_NAMES = {
+  // holidays & fasts (Hebcal names)
+  "Chanukah":"חנוכה", "Chanukah: 8th Day":"זאת חנוכה", "Asara B'Tevet":"עשרה בטבת", "Tu BiShvat":"ט״ו בשבט",
+  "Ta'anit Esther":"תענית אסתר", "Erev Purim":"ערב פורים", "Purim":"פורים", "Shushan Purim":"שושן פורים",
+  "Purim Meshulash":"פורים המשולש", "Purim Katan":"פורים קטן", "Shushan Purim Katan":"שושן פורים קטן",
+  "Ta'anit Bechorot":"תענית בכורות", "Erev Pesach":"ערב פסח", "Pesach":"פסח", "Pesach Sheni":"פסח שני",
+  "Lag BaOmer":"ל״ג בעומר", "Erev Shavuot":"ערב שבועות", "Shavuot":"שבועות", "Tzom Tammuz":"שבעה עשר בתמוז",
+  "Erev Tish'a B'Av":"ערב תשעה באב", "Tish'a B'Av":"תשעה באב", "Tish'a B'Av (observed)":"תשעה באב (נדחה)",
+  "Tisha B'Av":"תשעה באב", "Tu B'Av":"ט״ו באב", "Rosh Hashana LaBehemot":"ראש השנה למעשר בהמה",
+  "Leil Selichot":"ליל סליחות", "Erev Rosh Hashana":"ערב ראש השנה", "Erev Rosh Hashanah":"ערב ראש השנה",
+  "Rosh Hashanah":"ראש השנה", "Rosh Hashana II":"ראש השנה ב׳", "Tzom Gedaliah":"צום גדליה",
+  "Erev Yom Kippur":"ערב יום כיפור", "Yom Kippur":"יום כיפור", "Erev Sukkot":"ערב סוכות", "Sukkot":"סוכות",
+  "Sukkot VII (Hoshana Raba)":"הושענא רבה", "Shmini Atzeret":"שמיני עצרת", "Shemini Atzeret":"שמיני עצרת",
+  "Simchat Torah":"שמחת תורה", "Chag HaBanot":"חג הבנות", "Birkat Hachamah":"ברכת החמה",
+  // tachanun reasons
+  "between Yom Kippur and Sukkot":"בין יום כיפור לסוכות", "Shemini Atzeret / Simchat Torah":"שמיני עצרת / שמחת תורה",
+  "after Sukkot, until Rosh Chodesh":"אחרי סוכות, עד ראש חודש", "the month of Nisan":"חודש ניסן",
+  "Yom Yerushalayim":"יום ירושלים", "Yom HaMeyuchas":"יום המיוחס", "the three days of hagbalah":"שלושת ימי הגבלה",
+  "the week after Shavuot":"ימי התשלומין של שבועות", "Shabbat":"שבת", "Yom Ha'atzmaut":"יום העצמאות",
+  // special shabbatot
+  "Shabbat Shirah":"שבת שירה", "Shabbat Shekalim":"פרשת שקלים", "Shabbat Zachor":"פרשת זכור",
+  "Shabbat Parah":"פרשת פרה", "Shabbat HaChodesh":"פרשת החודש", "Shabbat HaGadol":"שבת הגדול",
+  "Shabbat Chazon":"שבת חזון", "Shabbat Nachamu":"שבת נחמו", "Shabbat Shuva":"שבת שובה",
+  // moon
+  "New moon":"ירח חדש", "Waxing crescent":"סהר מתמלא", "First quarter":"רבע ראשון", "Waxing gibbous":"ירח מתמלא",
+  "Full moon":"ירח מלא", "Waning gibbous":"ירח מתמעט", "Last quarter":"רבע אחרון", "Waning crescent":"סהר מתמעט",
+};
+const HE_MAS = {Berachot:"ברכות", Shabbat:"שבת", Eruvin:"עירובין", Pesachim:"פסחים", Shekalim:"שקלים", Yoma:"יומא",
+  Sukkah:"סוכה", Beitzah:"ביצה", "Rosh Hashana":"ראש השנה", Taanit:"תענית", Megillah:"מגילה", "Moed Katan":"מועד קטן",
+  Chagigah:"חגיגה", Yevamot:"יבמות", Ketubot:"כתובות", Nedarim:"נדרים", Nazir:"נזיר", Sotah:"סוטה", Gitin:"גיטין",
+  Kiddushin:"קידושין", "Baba Kamma":"בבא קמא", "Baba Metzia":"בבא מציעא", "Baba Batra":"בבא בתרא",
+  Sanhedrin:"סנהדרין", Makkot:"מכות", Shevuot:"שבועות", "Avodah Zarah":"עבודה זרה", Horayot:"הוריות",
+  Zevachim:"זבחים", Menachot:"מנחות", Chullin:"חולין", Bechorot:"בכורות", Arachin:"ערכין", Temurah:"תמורה",
+  Keritot:"כריתות", Meilah:"מעילה", Kinnim:"קינים", Tamid:"תמיד", Midot:"מידות", Niddah:"נדה"};
+const ROMAN = {I:1, II:2, III:3, IV:4, V:5, VI:6, VII:7, VIII:8};
+function heName(s){ // holiday / observance / tachanun-reason / moon names, shown in the current language
+  if(LANG!=="he" || !s) return s;
+  if(HE_NAMES[s]) return HE_NAMES[s];
+  let m;
+  if((m = s.match(/^Rosh Chodesh (.+)$/))) return "ראש חודש "+heMonth(m[1]);
+  if((m = s.match(/^Rosh Hashana (\d{4})$/))) return "ראש השנה "+gematria(+m[1]%1000);
+  if((m = s.match(/^Chanukah: (\d) Candles?$/))) return "חנוכה — נר "+gematria(+m[1]);
+  if((m = s.match(/^(Pesach|Sukkot|Shavuot) ([IV]+)( \(CH''M\))?$/)))
+    return `${HE_NAMES[m[1]]} ${gematria(ROMAN[m[2]])}${m[3]?" (חול המועד)":""}`;
+  return s;
+}
+function heParsha(en){
+  const C = window.__CHOK || {en2he:{}}, n = en.replace(/[’‘]/g,"'");
+  return C.en2he[n] || n.split("-").map(p=>C.en2he[p]||p).join("-");
+}
+const parshaLabel = en => L("Parashat "+en, "פרשת "+heParsha(en));
+const dafLabel = (mas, daf) => L(`${mas} ${daf}`, `${HE_MAS[mas]||mas} ${gematria(daf)}`);
+function locName(){
+  if(!loc.name) return L("custom location", "מיקום מותאם");
+  if(loc.name==="My location") return L("My location", "המיקום שלי");
+  if(LANG!=="he") return loc.name;
+  const p = PRESETS.find(x=>x.id===loc.id);
+  if(p) return p.he;
+  if(loc.he===undefined){ // saved before Hebrew names were kept: look it up in the embedded index once
+    const m = loc.name.match(/^(.*) \(([^)]+)\)$/), C = window.__CITIES || [];
+    const c = m && C.find(c=>c[1]===m[2] && (c[0]===m[1] || (c[5]||"").split(";").includes(m[1])));
+    loc.he = (c && c[5] && c[5].split(";").find(a=>/[א-ת]/.test(a))) || "";
+  }
+  return loc.he || loc.name;
+}
 
 /* ---------- helpers ---------- */
 function partsInTz(date, tz){
@@ -426,7 +536,7 @@ function partsInTz(date, tz){
 }
 function fmtTime(date){
   if(!date) return "—";
-  return new Intl.DateTimeFormat(undefined,{timeZone:loc.tz,hour:"numeric",minute:"2-digit"}).format(date);
+  return new Intl.DateTimeFormat(locTag(),{timeZone:loc.tz,hour:"numeric",minute:"2-digit"}).format(date);
 }
 function addDays(ymd, n){
   const dt = new Date(Date.UTC(ymd.y, ymd.m-1, ymd.d+n));
@@ -590,8 +700,8 @@ function fmtMolad(ms){
   // traditional molad clock (as announced in shul), not local time
   const rem = ((ms % 60000) + 60000) % 60000;
   const chal = Math.floor(rem/CHELEK_MS);
-  const s = new Intl.DateTimeFormat(undefined,{timeZone:"UTC",weekday:"long",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(ms-rem));
-  return `${s} and ${chal} ${chal===1?"chelek":"chalakim"}`;
+  const s = new Intl.DateTimeFormat(locTag(),{timeZone:"UTC",weekday:"long",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(ms-rem));
+  return L(`${s} and ${chal} ${chal===1?"chelek":"chalakim"}`, `${s} ו־${chal} ${chal===1?"חלק":"חלקים"}`);
 }
 // Hebcal month spellings → ICU month names used by moladMs
 const MONTH_MAP = {"Sh'vat":"Shevat","Cheshvan":"Heshvan","Tammuz":"Tamuz","Iyyar":"Iyar","Tishrei":"Tishri"};
@@ -682,9 +792,11 @@ let heroTarget = null; // ms of the live hero deadline, for the countdown ticker
 // deadline are exactly when they matter — so the countdown gains them, not the face.
 function fmtCountdown(ms){
   const s = Math.max(0, Math.round(ms/1000));
-  if(s >= 3600){ const m = Math.round(s/60); return `in ${Math.floor(m/60)} h ${m%60} min`; }
-  if(s >= 600) return `in ${Math.round(s/60)} min`;
-  return `in ${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  if(s >= 3600){ const m = Math.round(s/60), h = Math.floor(m/60);
+    return L(`in ${h} h ${m%60} min`, `בעוד ${h} שע׳ ${m%60} דק׳`); }
+  if(s >= 600) return L(`in ${Math.round(s/60)} min`, `בעוד ${Math.round(s/60)} דק׳`);
+  const mmss = `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  return L(`in ${mmss}`, `בעוד ${mmss}`);
 }
 
 function render(){
@@ -700,12 +812,12 @@ function render(){
   const afterSunset = live && z.sunset && now > z.sunset;
   const hebDate = afterSunset ? addDays(today,1) : today;
   const hp = hebrewParts(new Date(Date.UTC(hebDate.y, hebDate.m-1, hebDate.d, 12)));
-  $("hdate-en").textContent = hp.en;
-  $("hdate-he").textContent = hp.he;
-  $("rollnote").textContent = afterSunset ? "· after sunset — the new Jewish day has begun" : "";
+  $("hdate-en").textContent = L(hp.en, hp.he);
+  $("hdate-he").textContent = L(hp.he, "");
+  $("rollnote").textContent = afterSunset ? L("· after sunset — the new Jewish day has begun", "· אחרי השקיעה — היום העברי החדש התחיל") : "";
   $("gdate").textContent = live
-    ? new Intl.DateTimeFormat(undefined,{timeZone:loc.tz,weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(now)
-    : new Intl.DateTimeFormat(undefined,{timeZone:"UTC",weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(noonUTC(today));
+    ? new Intl.DateTimeFormat(locTag(),{timeZone:loc.tz,weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(now)
+    : new Intl.DateTimeFormat(locTag(),{timeZone:"UTC",weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(noonUTC(today));
 
   const hYearNum = +hp.year;
   const rolled = afterSunset ? addDays(today,1) : today;
@@ -718,16 +830,16 @@ function render(){
   const isErev = !todayIsRest && tomorrowIsRest && !afterSunset;
 
   // header chips: current holidays, Rosh Chodesh tonight, eruv tavshilin
-  const chips = todayHols.map(h=>`<span class="holiday">${h.name}</span>`);
+  const chips = todayHols.map(h=>`<span class="holiday">${heName(h.name)}</span>`);
   if(!afterSunset && !todayHols.some(h=>h.f&4)){
     const rcT = holsFor(addDays(today,1)).find(h=>h.f&4);
-    if(rcT) chips.push(`<span class="holiday soon">${rcT.name} begins tonight</span>`);
+    if(rcT) chips.push(`<span class="holiday soon">${L(`${rcT.name} begins tonight`, `${heName(rcT.name)} מתחיל הלילה`)}</span>`);
   }
   if(!todayIsRest && holsFor(addDays(today,1)).some(h=>h.f&1)){
     let runHasFri = false;
     for(let i=1; i<=3 && isRestYmd(addDays(today,i)); i++)
       if(weekdayInTz(noonUTC(addDays(today,i)),"UTC")==="Fri") runHasFri = true;
-    if(runHasFri) chips.push(`<span class="holiday eruv">Eruv Tavshilin today</span>`);
+    if(runHasFri) chips.push(`<span class="holiday eruv">${L("Eruv Tavshilin today", "עירוב תבשילין היום")}</span>`);
   }
   $("holiday-slot").innerHTML = chips.join(" ");
 
@@ -735,13 +847,15 @@ function render(){
   const tToday = tachanunFor(today), tNext = tachanunFor(addDays(today,1));
   const sv = $("tach-shacharit"), mv = $("tach-mincha");
   sv.className = "verdict " + (tToday.omit ? "omit" : "said");
-  sv.innerHTML = tToday.omit ? `Omitted<small>${tToday.reason}</small>` : "Said";
+  const OMIT = L("Omitted", "לא אומרים"), SAID = L("Said", "אומרים");
+  sv.innerHTML = tToday.omit ? `${OMIT}<small>${heName(tToday.reason)}</small>` : SAID;
   const minchaOmit = tToday.omit || eveOmits(tNext);
   mv.className = "verdict " + (minchaOmit ? "omit" : "said");
-  mv.innerHTML = !minchaOmit ? "Said" :
-    tToday.omit ? `Omitted<small>${tToday.reason}</small>` : `Omitted<small>eve of ${tNext.reason}</small>`;
+  mv.innerHTML = !minchaOmit ? SAID :
+    tToday.omit ? `${OMIT}<small>${heName(tToday.reason)}</small>`
+                : `${OMIT}<small>${L(`eve of ${tNext.reason}`, `ערב ${heName(tNext.reason)}`)}</small>`;
   $("tach-note").textContent = (tToday.note || (eveOmits(tNext) && tNext.note)) ?
-    "Minhagim vary for this day — follow your community's practice." : "";
+    L("Minhagim vary for this day — follow your community's practice.", "המנהגים חלוקים ביום זה — נהגו כמנהג קהילתכם.") : "";
 
   // Parsha of the coming Shabbat (location-aware: Israel and diaspora schedules differ some years)
   {
@@ -753,16 +867,19 @@ function render(){
     window.__satYmd = sat;
     const satIso = iso(sat);
     const idx = (loc.israel ? P.il : P.d)[satIso];
-    $("parsha-name").textContent = idx!==undefined ? "Parashat "+P.names[idx] :
-      (sat.y<=2046 ? "Yom Tov reading" : "—");
-    $("parsha-date").textContent = new Intl.DateTimeFormat(undefined,{timeZone:"UTC",month:"long",day:"numeric"})
-      .format(noonUTC(sat)) + (loc.israel ? " · Israel schedule" : "");
-    $("parsha-special").innerHTML = P.sp[satIso] ? `<span class="special-shabbat">${P.sp[satIso]}</span>` : "";
+    const YT_READING = L("Yom Tov reading", "קריאת יום טוב");
+    // the learning card and Chok reader key off the English name, whatever language is shown
+    window.__weekParsha = idx!==undefined ? P.names[idx] : (sat.y<=2046 ? "Yom Tov reading" : "—");
+    $("parsha-name").textContent = idx!==undefined ? parshaLabel(P.names[idx]) :
+      (sat.y<=2046 ? YT_READING : "—");
+    $("parsha-date").textContent = new Intl.DateTimeFormat(locTag(),{timeZone:"UTC",month:"long",day:"numeric"})
+      .format(noonUTC(sat)) + (loc.israel ? L(" · Israel schedule", " · לוח ארץ ישראל") : "");
+    $("parsha-special").innerHTML = P.sp[satIso] ? `<span class="special-shabbat">${heName(P.sp[satIso])}</span>` : "";
     // divergence weeks: show what the other zone reads
     const otherIdx = (loc.israel ? P.d : P.il)[satIso];
     $("parsha-diverge").textContent = (sat.y<=2046 && otherIdx!==idx)
-      ? (loc.israel ? "Outside Israel: " : "In Israel: ") +
-        (otherIdx===undefined ? "Yom Tov reading" : "Parashat "+P.names[otherIdx])
+      ? (loc.israel ? L("Outside Israel: ", "בחוץ לארץ: ") : L("In Israel: ", "בארץ ישראל: ")) +
+        (otherIdx===undefined ? YT_READING : parshaLabel(P.names[otherIdx]))
       : "";
   }
 
@@ -770,21 +887,23 @@ function render(){
   const refMs = live ? now.getTime() : noonUTC(today).getTime();
   const ph = moonPhase(new Date(refMs));
   $("moon-svg").innerHTML = moonSVG(ph, loc.lat<0);
-  $("moon-name").textContent = ph.name;
-  $("moon-detail").textContent = `${Math.round(ph.illum*100)}% illuminated · lunar day ${Math.max(1,Math.ceil(ph.age))}`;
+  $("moon-name").textContent = heName(ph.name);
+  const lunarDay = Math.max(1,Math.ceil(ph.age)), illum = Math.round(ph.illum*100);
+  $("moon-detail").textContent = L(`${illum}% illuminated · lunar day ${lunarDay}`, `${illum}% מואר · יום ${lunarDay} לחודש הירחי`);
   {
     const order = hMonths(hYearNum), pos = order.indexOf(hp.month);
     const nextMonth = pos===order.length-1 ? "Tishri" : order[pos+1];
     const nextYear = pos===order.length-1 ? hYearNum+1 : hYearNum;
-    $("molad-line").textContent = `Molad ${nextMonth==="Tishri"?"Tishrei":nextMonth}: ${fmtMolad(moladMs(nextYear, nextMonth))}`;
+    $("molad-line").textContent = L(`Molad ${nextMonth==="Tishri"?"Tishrei":nextMonth}`, `מולד ${heMonth(nextMonth)}`)
+      + `: ${fmtMolad(moladMs(nextYear, nextMonth))}`;
     // molad clock ≈ Jerusalem mean time (UTC+2:21); convert to a true instant for the window
     const m0 = moladMs(hYearNum, hp.month) - (2*60+21)*60000;
     const kStart = m0 + 3*86400000, kEnd = m0 + (14*24 + 18)*3600000 + 22*60000;
-    const fmtD = t => new Intl.DateTimeFormat(undefined,{timeZone:loc.tz,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(t));
+    const fmtD = t => new Intl.DateTimeFormat(locTag(),{timeZone:loc.tz,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(t));
     $("levana-line").textContent =
-      refMs < kStart ? `Kiddush Levana: from ${fmtD(kStart)}` :
-      refMs <= kEnd  ? `Kiddush Levana: until ${fmtD(kEnd)}` :
-      `Kiddush Levana: after the next molad`;
+      refMs < kStart ? L(`Kiddush Levana: from ${fmtD(kStart)}`, `קידוש לבנה: החל מ־${fmtD(kStart)}`) :
+      refMs <= kEnd  ? L(`Kiddush Levana: until ${fmtD(kEnd)}`, `קידוש לבנה: עד ${fmtD(kEnd)}`) :
+      L(`Kiddush Levana: after the next molad`, `קידוש לבנה: אחרי המולד הבא`);
   }
 
   // Today & tonight card
@@ -792,16 +911,17 @@ function render(){
     const lines = [];
     for(const h of todayHols){
       let extra = "";
-      if(h.f&2 && z.fastEnd) extra = ` · ends ${fmtTime(z.fastEnd)}`;
-      lines.push(`<div class="tl-row"><strong>${h.name}</strong>${extra}</div>`);
+      if(h.f&2 && z.fastEnd) extra = L(` · ends ${fmtTime(z.fastEnd)}`, ` · מסתיים ב־${fmtTime(z.fastEnd)}`);
+      lines.push(`<div class="tl-row"><strong>${heName(h.name)}</strong>${extra}</div>`);
     }
     if(!afterSunset){
       const tomHols = holsFor(addDays(today,1)).filter(h=>!(h.f&16) && !todayHols.some(t=>t.name===h.name));
-      for(const h of tomHols) lines.push(`<div class="tl-row dim">Tonight: <strong>${h.name}</strong>${h.f&2 && !/Tish'a B'Av|Yom Kippur/.test(h.name) ? " (fast begins at dawn)" : ""}</div>`);
+      for(const h of tomHols) lines.push(`<div class="tl-row dim">${L("Tonight: ", "הלילה: ")}<strong>${heName(h.name)}</strong>${h.f&2 && !/Tish'a B'Av|Yom Kippur/.test(h.name) ? L(" (fast begins at dawn)", " (הצום מתחיל בעלות השחר)") : ""}</div>`);
     }
     const om = omerDay(hp);
-    if(om) lines.push(`<div class="tl-row omer">${afterSunset?"Tonight is":"Today is"} <strong>day ${om}</strong> of the Omer</div>`);
-    if(!lines.length) lines.push(`<div class="tl-row dim">A regular day — no special observances.</div>`);
+    if(om) lines.push(`<div class="tl-row omer">${L(`${afterSunset?"Tonight is":"Today is"} <strong>day ${om}</strong> of the Omer`,
+      `${afterSunset?"הלילה":"היום"} <strong>${om} לעומר</strong>`)}</div>`);
+    if(!lines.length) lines.push(`<div class="tl-row dim">${L("A regular day — no special observances.", "יום רגיל — אין מועדים מיוחדים.")}</div>`);
     $("today-lines").innerHTML = lines.join("");
   }
 
@@ -823,7 +943,6 @@ function render(){
     else if(chan) hallel = "Full";
     else if((hp.day===1 && hp.month!=="Tishri") || hp.day===30) hallel = "Half";
     const mashiv = key>=K("Tishri",22) && key<=K("Nisan",15);
-    const mashivNote = key===K("Tishri",22) ? " (from Musaf)" : key===K("Nisan",15) ? " (until Musaf)" : "";
     const rolledCivil = rolled;
     const gregLeapNext = y => ((y+1)%4===0 && ((y+1)%100!==0 || (y+1)%400===0));
     const talStart = gregLeapNext(rolledCivil.y) ? 6 : 5;
@@ -840,28 +959,31 @@ function render(){
     davenFacts = {yvy, hallel, alhanissim, ldavid, talFirst};
     const dv = [];
     const row = (l,v,on)=>dv.push(`<div class="dv${on?" on":""}"><span>${l}</span><span class="v">${v}</span></div>`);
-    row("Ya'aleh V'Yavo", yvy?"Said":"—", yvy);
-    row("Hallel", hallel, hallel!=="—");
-    if(ldavid) row("L'David (Ps. 27)",
-      `<button type="button" class="learn-link dv-open" data-kind="ps27">twice daily</button>`, true);
-    if(alhanissim) row("Al HaNissim", "Said", true);
-    row("Rain", (mashiv?"Mashiv HaRuach":"Morid HaTal")+mashivNote, mashiv);
-    row("Tal U'Matar", tal?"V'Ten Tal U'Matar":"V'Ten Beracha", tal);
+    const SAID = L("Said", "אומרים"), AT_MINCHA = L("at Mincha", "במנחה");
+    row(L("Ya'aleh V'Yavo", "יעלה ויבוא"), yvy?SAID:"—", yvy);
+    row(L("Hallel", "הלל"), hallel==="—" ? "—" : L(hallel, hallel==="Full" ? "שלם" : "בדילוג"), hallel!=="—");
+    if(ldavid) row(L("L'David (Ps. 27)", "לדוד ה׳ אורי (תהלים כ״ז)"),
+      `<button type="button" class="learn-link dv-open" data-kind="ps27">${L("twice daily", "פעמיים ביום")}</button>`, true);
+    if(alhanissim) row(L("Al HaNissim", "על הניסים"), SAID, true);
+    row(L("Rain", "הזכרת גשם"), (mashiv ? L("Mashiv HaRuach", "משיב הרוח") : L("Morid HaTal", "מוריד הטל"))
+      + (key===K("Tishri",22) ? L(" (from Musaf)", " (ממוסף)") : key===K("Nisan",15) ? L(" (until Musaf)", " (עד מוסף)") : ""), mashiv);
+    row(L("Tal U'Matar", "שאלת גשמים"), tal ? L("V'Ten Tal U'Matar", "ותן טל ומטר לברכה") : L("V'Ten Beracha", "ותן ברכה"), tal);
     if(holsFor(today).some(h=>h.f&2) && !/Yom Kippur/.test((holsFor(today).find(h=>h.f&2)||{}).name))
-      row("Aneinu", "at Mincha", true);
-    if(hp.month==="Av" && hp.day===9) row("Nacheim", "at Mincha", true);
+      row(L("Aneinu", "עננו"), AT_MINCHA, true);
+    if(hp.month==="Av" && hp.day===9) row(L("Nacheim", "נחם"), AT_MINCHA, true);
     $("daven-lines").innerHTML = dv.join("");
   }
 
   // Learning card
   {
     const df = dafFor(iso(today));
-    const parshaName = $("parsha-name").textContent.replace(/^Parashat /,"");
-    window.__weekParsha = parshaName;
+    const parshaName = window.__weekParsha || "—";
+    const parshaShown = parshaName==="Yom Tov reading" ? L(parshaName, "קריאת יום טוב") : L(parshaName, heParsha(parshaName));
     const lines = [];
-    if(df) lines.push(`<div class="tl-row"><button type="button" class="learn-link" data-kind="daf" data-ref="${df.mas} ${df.daf}">Daf Yomi — <strong>${df.mas} ${df.daf}</strong></button></div>`);
-    lines.push(`<div class="tl-row"><button type="button" class="learn-link" data-kind="chok">Chok L'Yisrael — <strong>${parshaName}, today's seder</strong></button></div>`);
-    lines.push(`<div class="tl-row dim small">Full daily texts inline. Zohar shown in the original; the Matok MiDvash commentary is copyrighted (author d. 2005) and can't be included.</div>`);
+    if(df) lines.push(`<div class="tl-row"><button type="button" class="learn-link" data-kind="daf" data-ref="${df.mas} ${df.daf}">${L("Daf Yomi", "דף יומי")} — <strong>${dafLabel(df.mas, df.daf)}</strong></button></div>`);
+    lines.push(`<div class="tl-row"><button type="button" class="learn-link" data-kind="chok">${L("Chok L'Yisrael", "חק לישראל")} — <strong>${L(`${parshaShown}, today's seder`, `${parshaShown}, סדר היום`)}</strong></button></div>`);
+    lines.push(`<div class="tl-row dim small">${L("Full daily texts inline. Zohar shown in the original; the Matok MiDvash commentary is copyrighted (author d. 2005) and can't be included.",
+      "הטקסטים המלאים מוצגים כאן. הזוהר מוצג במקור; פירוש מתוק מדבש מוגן בזכויות יוצרים (המחבר נפטר ב־2005) ולכן אינו כלול.")}</div>`);
     $("learn-lines").innerHTML = lines.join("");
   }
 
@@ -876,7 +998,8 @@ function render(){
           const disp = rc.name.replace("Rosh Chodesh ","");
           const mn = MONTH_MAP[disp] || disp;
           const my = +hebrewParts(noonUTC(addDays(sat,i))).year;
-          if(mn!=="Tishri") mv = `Shabbat Mevarchim — Chodesh ${disp} · Molad: ${fmtMolad(moladMs(my, mn))}`;
+          if(mn!=="Tishri") mv = L(`Shabbat Mevarchim — Chodesh ${disp} · Molad: `, `שבת מברכים — חודש ${heMonth(mn)} · המולד: `)
+            + fmtMolad(moladMs(my, mn));
           break;
         }
       }
@@ -885,20 +1008,22 @@ function render(){
   }
 
   // Times list
+  const MA = L("Magen Avraham", "מג״א"), GRA = L("Gra", "גר״א");
   const rows = [
-    ["alot","Alot hashachar","dawn, 16.1°"],
-    ["misheyakir","Misheyakir","tallit & tefillin, 11°"],
-    ["sunrise","Netz hachama","sunrise"],
-    ["shemaMA","Sof zman Shema","Magen Avraham"],
-    ["shema","Sof zman Shema","Gra"],
-    ["tefillaMA","Sof zman tefilla","Magen Avraham"],
-    ["tefilla","Sof zman tefilla","Gra"],
-    ["chatzot","Chatzot","midday"],
-    ["minchaG","Mincha gedola",""],
-    ["minchaK","Mincha ketana",""],
-    ["plag","Plag hamincha",""],
+    ["alot", L("Alot hashachar", "עלות השחר"), L("dawn, 16.1°", "16.1°")],
+    ["misheyakir", L("Misheyakir", "משיכיר"), L("tallit & tefillin, 11°", "טלית ותפילין, 11°")],
+    ["sunrise", L("Netz hachama", "הנץ החמה"), L("sunrise", "זריחה")],
+    ["shemaMA", L("Sof zman Shema", "סוף זמן ק״ש"), MA],
+    ["shema", L("Sof zman Shema", "סוף זמן ק״ש"), GRA],
+    ["tefillaMA", L("Sof zman tefilla", "סוף זמן תפילה"), MA],
+    ["tefilla", L("Sof zman tefilla", "סוף זמן תפילה"), GRA],
+    ["chatzot", L("Chatzot", "חצות היום"), L("midday", "")],
+    ["minchaG", L("Mincha gedola", "מנחה גדולה"), ""],
+    ["minchaK", L("Mincha ketana", "מנחה קטנה"), ""],
+    ["plag", L("Plag hamincha", "פלג המנחה"), ""],
   ];
-  if(isErev) rows.push(["candles","Candle lighting", (loc.candles||18)+" min before sunset"]);
+  const CANDLES = L("Candle lighting", "הדלקת נרות"), FAST_BEGINS = L("Fast begins", "תחילת הצום");
+  if(isErev) rows.push(["candles", CANDLES, L((loc.candles||18)+" min before sunset", (loc.candles||18)+" דק׳ לפני השקיעה")]);
   // fast-day rows (from the Hebcal dataset; minor fasts run dawn→nightfall)
   const fastToday = holsFor(today).find(h=>h.f&2);
   const fastTomorrow = holsFor(addDays(today,1)).find(h=>h.f&2);
@@ -906,22 +1031,22 @@ function render(){
     z.fastEnd = z.tzeit;
     if(/Tish'a B'Av|Yom Kippur/.test(fastToday.name)){
       z.fastBegan = computeZmanim(addDays(today,-1)).sunset;
-      rows.splice(rows.findIndex(r=>r[0]==="misheyakir"), 0, ["fastBegan","Fast began","last night at sunset"]);
+      rows.splice(rows.findIndex(r=>r[0]==="misheyakir"), 0, ["fastBegan", L("Fast began", "תחילת הצום"), L("last night at sunset", "אמש בשקיעה")]);
     } else {
       z.fastStart = z.alot;
-      rows.splice(rows.findIndex(r=>r[0]==="misheyakir"), 0, ["fastStart","Fast begins","dawn"]);
+      rows.splice(rows.findIndex(r=>r[0]==="misheyakir"), 0, ["fastStart", FAST_BEGINS, L("dawn", "עלות השחר")]);
     }
   }
   if(fastTomorrow && /Tish'a B'Av/.test(fastTomorrow.name) && z.sunset){
     z.fastStart = z.sunset;
-    rows.push(["fastStart","Fast begins","Tish'a B'Av, at sunset"]);
+    rows.push(["fastStart", FAST_BEGINS, L("Tish'a B'Av, at sunset", "תשעה באב, בשקיעה")]);
   }
   rows.push(
-    ["sunset","Shkia","sunset"],
-    ["tzeit","Tzeit hakochavim","nightfall, 8.5°"],
+    ["sunset", L("Shkia", "שקיעה"), L("sunset", "")],
+    ["tzeit", L("Tzeit hakochavim", "צאת הכוכבים"), L("nightfall, 8.5°", "8.5°")],
   );
   if(fastToday && z.tzeit && !/Yom Kippur/.test(fastToday.name))
-    rows.push(["fastEnd","Fast ends","nightfall"]);
+    rows.push(["fastEnd", L("Fast ends", "סוף הצום"), L("nightfall", "צאת הכוכבים")]);
   // Shabbat/chag block schedule — shown from erev onward, since during the
   // rest days themselves the user won't be checking. Covers multi-day blocks
   // (2-day chag, chag→Shabbat, Shabbat→chag) with per-transition candle rules.
@@ -929,7 +1054,7 @@ function render(){
     const block = [];
     let d = todayIsRest ? today : addDays(today,1);
     while(isRestYmd(d) && block.length<4){ block.push(d); d = addDays(d,1); }
-    const wdOf = y => new Intl.DateTimeFormat(undefined,{timeZone:"UTC",weekday:"long"}).format(noonUTC(y));
+    const wdOf = y => new Intl.DateTimeFormat(locTag(),{timeZone:"UTC",weekday:"long"}).format(noonUTC(y));
     for(let i=0;i<block.length;i++){
       const day = block[i], zi = iso(day)===iso(today) ? z : computeZmanim(day);
       const key = "blk"+i;
@@ -937,22 +1062,22 @@ function render(){
         const nextIsShabbat = weekdayInTz(noonUTC(block[i+1]),"UTC")==="Sat";
         if(nextIsShabbat && zi.candles){
           z[key] = zi.candles;
-          rows.push([key, `Candles ${wdOf(day)}`, "before sunset, from an existing flame"]);
+          rows.push([key, L(`Candles ${wdOf(day)}`, `הדלקת נרות ${wdOf(day)}`), L("before sunset, from an existing flame", "לפני השקיעה, מאש קיימת")]);
         } else if(zi.tzeit){
           z[key] = zi.tzeit;
-          rows.push([key, `Candles ${wdOf(day)} night`, "after nightfall, from an existing flame"]);
+          rows.push([key, L(`Candles ${wdOf(day)} night`, `הדלקת נרות ${wdOf(day)} בלילה`), L("after nightfall, from an existing flame", "אחרי צאת הכוכבים, מאש קיימת")]);
         }
       } else if(zi.tzeit){
         z[key] = zi.tzeit;
-        const lbl = weekdayInTz(noonUTC(day),"UTC")==="Sat" ? "Shabbat ends" : "Yom Tov ends";
-        rows.push([key, lbl, `${wdOf(day)} night · R"T ${fmtTime(zi.rt)}`]);
+        const lbl = weekdayInTz(noonUTC(day),"UTC")==="Sat" ? L("Shabbat ends", "צאת השבת") : L("Yom Tov ends", "צאת החג");
+        rows.push([key, lbl, L(`${wdOf(day)} night · R"T ${fmtTime(zi.rt)}`, `${wdOf(day)} בלילה · ר״ת ${fmtTime(zi.rt)}`)]);
       }
     }
   }
-  rows.push(["rt","Rabbeinu Tam","72 min after sunset"]);
-  rows.push(["chatzotNight","Chatzot halayla","halachic midnight, tonight"]);
+  rows.push(["rt", L("Rabbeinu Tam", "רבנו תם"), L("72 min after sunset", "72 דק׳ אחרי השקיעה")]);
+  rows.push(["chatzotNight", L("Chatzot halayla", "חצות הלילה"), L("halachic midnight, tonight", "הלילה")]);
   if(z.tikkunChatzot)
-    rows.push(["tikkunChatzot","Tikkun Chatzot","from 6 h after tzeit · Magen Avraham, Rebbe Nachman"]);
+    rows.push(["tikkunChatzot", L("Tikkun Chatzot", "תיקון חצות"), L("from 6 h after tzeit · Magen Avraham, Rebbe Nachman", "6 שעות אחרי צאת הכוכבים · מג״א, רבי נחמן")]);
   $("times").innerHTML = rows.map(([k,name,sub])=>{
     const t = z[k];
     const passed = live && t && t < now;
@@ -967,7 +1092,7 @@ function render(){
   {
     const rowByKey = key => rows.find(r=>r[0]===key);
     // disambiguate rows that appear twice under different shitos
-    const qname = (name, sub) => name + (sub && /Avraham|Gra/.test(sub) ? ` — ${sub}` : "");
+    const qname = (name, sub) => name + (sub && (sub===MA || sub===GRA) ? ` — ${sub}` : "");
     let hero = null;
     heroTarget = null; // the per-second ticker only runs when a live deadline is set
     const PRIORITY = ["fastEnd","candles","blk0","blk1","blk2","blk3"];
@@ -991,21 +1116,21 @@ function render(){
         const tom = addDays(today,1), zT = computeZmanim(tom);
         const fT = holsFor(tom).find(h=>h.f&2);
         if(fT && /Tish'a B'Av|Yom Kippur/.test(fT.name) && zT.tzeit){
-          $("next-name").textContent = "Fast ends"; // began at sunset; runs through tomorrow
+          $("next-name").textContent = L("Fast ends", "סוף הצום"); // began at sunset; runs through tomorrow
           $("next-time").textContent = fmtTime(zT.tzeit);
-          $("next-in").textContent = "tomorrow night";
+          $("next-in").textContent = L("tomorrow night", "מחר בלילה");
         } else if(fT && zT.alot){
-          $("next-name").textContent = `${fT.name} — fast begins`;
+          $("next-name").textContent = L(`${fT.name} — fast begins`, `${heName(fT.name)} — תחילת הצום`);
           $("next-time").textContent = fmtTime(zT.alot);
-          $("next-in").textContent = `dawn tomorrow · netz ${fmtTime(zT.sunrise)}`;
+          $("next-in").textContent = L(`dawn tomorrow · netz ${fmtTime(zT.sunrise)}`, `מחר בעלות השחר · הנץ ${fmtTime(zT.sunrise)}`);
         } else if(zT.sunrise){
-          $("next-name").textContent = "Netz hachama — tomorrow";
+          $("next-name").textContent = L("Netz hachama — tomorrow", "הנץ החמה — מחר");
           $("next-time").textContent = fmtTime(zT.sunrise);
-          $("next-in").textContent = `alot ${fmtTime(zT.alot)}`;
+          $("next-in").textContent = L(`alot ${fmtTime(zT.alot)}`, `עלות השחר ${fmtTime(zT.alot)}`);
         } else {
-          $("next-name").textContent = "The day is complete";
+          $("next-name").textContent = L("The day is complete", "היום הסתיים");
           $("next-time").textContent = "—";
-          $("next-in").textContent = "tomorrow's dawn comes next";
+          $("next-in").textContent = L("tomorrow's dawn comes next", "הבא: עלות השחר של מחר");
         }
       }
     } else {
@@ -1014,11 +1139,11 @@ function render(){
         const r = rowByKey(k);
         if(r && z[k]){ hero = {k, name:r[1], t:z[k]}; break; }
       }
-      if(!hero && z.sunset) hero = {k:"sunset", name:"Shkia", t:z.sunset};
+      if(!hero && z.sunset) hero = {k:"sunset", name:L("Shkia", "שקיעה"), t:z.sunset};
       heroInfo = hero;
       $("next-name").textContent = hero ? hero.name : "—";
       $("next-time").textContent = hero ? fmtTime(hero.t) : "—";
-      $("next-in").textContent = "viewing this date";
+      $("next-in").textContent = L("viewing this date", "תאריך נבחר");
     }
   }
 
@@ -1028,41 +1153,46 @@ function render(){
     if(!live || !z.sunrise || !z.tzeit){ el.hidden = true; el.innerHTML = ""; }
     else {
       const F = davenFacts || {};
-      const LDAVID_BTN = `<button type="button" class="learn-link strip-open" data-kind="ps27">L'David</button>`;
+      const LDAVID_BTN = `<button type="button" class="learn-link strip-open" data-kind="ps27">${L("L'David", "לדוד")}</button>`;
+      const YVY = L("Ya'aleh V'Yavo", "יעלה ויבוא"), AHN = L("Al HaNissim", "על הניסים");
+      const tach = omit => L(`Tachanun ${omit?"omitted":"said"}`, omit ? "בלי תחנון" : "אומרים תחנון");
       const tT = tachanunFor(today), tN = tachanunFor(addDays(today,1));
       const items = [];
       if(now < z.chatzot){
-        items.push(`<span class="svc">Shacharit</span>`);
-        items.push(`<b class="${tT.omit?"on":""}">Tachanun ${tT.omit?"omitted":"said"}</b>`);
-        if(F.hallel && F.hallel!=="—") items.push(`<b class="on">Hallel — ${F.hallel.toLowerCase()}</b>`);
-        if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
-        if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
+        items.push(`<span class="svc">${L("Shacharit", "שחרית")}</span>`);
+        items.push(`<b class="${tT.omit?"on":""}">${tach(tT.omit)}</b>`);
+        if(F.hallel && F.hallel!=="—")
+          items.push(`<b class="on">${L(`Hallel — ${F.hallel.toLowerCase()}`, F.hallel==="Full" ? "הלל שלם" : "חצי הלל")}</b>`);
+        if(F.yvy) items.push(`<b class="on">${YVY}</b>`);
+        if(F.alhanissim) items.push(`<b class="on">${AHN}</b>`);
         if(F.ldavid) items.push(LDAVID_BTN);
       } else if(now < z.tzeit){
         const omit = tT.omit || eveOmits(tN);
-        items.push(`<span class="svc">Mincha</span>`);
-        items.push(`<b class="${omit?"on":""}">Tachanun ${omit?"omitted":"said"}</b>`);
-        if(F.yvy) items.push(`<b class="on">Ya'aleh V'Yavo</b>`);
-        if(fastToday && !/Yom Kippur/.test(fastToday.name)) items.push(`<b class="on">Aneinu</b>`);
-        if(hp.month==="Av" && hp.day===9) items.push(`<b class="on">Nacheim</b>`);
-        if(F.alhanissim) items.push(`<b class="on">Al HaNissim</b>`);
+        items.push(`<span class="svc">${L("Mincha", "מנחה")}</span>`);
+        items.push(`<b class="${omit?"on":""}">${tach(omit)}</b>`);
+        if(F.yvy) items.push(`<b class="on">${YVY}</b>`);
+        if(fastToday && !/Yom Kippur/.test(fastToday.name)) items.push(`<b class="on">${L("Aneinu", "עננו")}</b>`);
+        if(hp.month==="Av" && hp.day===9) items.push(`<b class="on">${L("Nacheim", "נחם")}</b>`);
+        if(F.alhanissim) items.push(`<b class="on">${AHN}</b>`);
         if(F.ldavid) items.push(LDAVID_BTN); // Nusach Sefard says the second at Mincha
       } else {
-        items.push(`<span class="svc">Tonight</span>`);
+        items.push(`<span class="svc">${L("Tonight", "הלילה")}</span>`);
         const om = omerDay(hp);
-        if(om) items.push(`<b class="on">count Omer day ${om}</b>`);
+        if(om) items.push(`<b class="on">${L(`count Omer day ${om}`, `ספירת העומר: ${om}`)}</b>`);
         if(F.yvy){ // Rosh Chodesh, Yom Tov and Chol HaMoed all take Ya'aleh V'Yavo at night
           const which = holsFor(rolled).find(h=>h.f&(1|4|8));
-          items.push(`<b class="on">Ya'aleh V'Yavo${which?` — ${which.name}`:""}</b>`);
+          items.push(`<b class="on">${YVY}${which?` — ${heName(which.name)}`:""}</b>`);
         }
-        if(isChanukah(rolled)) items.push(`<b class="on">Al HaNissim</b>`);
-        if(F.talFirst) items.push(`<b class="on">begin V'Ten Tal U'Matar</b>`);
+        if(isChanukah(rolled)) items.push(`<b class="on">${AHN}</b>`);
+        if(F.talFirst) items.push(`<b class="on">${L("begin V'Ten Tal U'Matar", "מתחילים ותן טל ומטר")}</b>`);
         const seder = hp.month==="Nisan" && (hp.day===15 || (!loc.israel && hp.day===16));
-        if(items.length===1) items.push(`<b>regular Ma'ariv</b>`);
-        if(z.chatzotNight)
+        if(items.length===1) items.push(`<b>${L("regular Ma'ariv", "ערבית רגילה")}</b>`);
+        if(z.chatzotNight){
+          const cz = fmtTime(z.chatzotNight);
           items.push(seder
-            ? `<b class="on">afikoman before chatzot ${fmtTime(z.chatzotNight)}</b>`
-            : `<b>Shema &amp; Ma'ariv before chatzot ${fmtTime(z.chatzotNight)}</b>`);
+            ? `<b class="on">${L(`afikoman before chatzot ${cz}`, `אפיקומן לפני חצות ${cz}`)}</b>`
+            : `<b>${L(`Shema &amp; Ma'ariv before chatzot ${cz}`, `ק״ש וערבית לפני חצות ${cz}`)}</b>`);
+        }
       }
       el.innerHTML = items.join("");
       el.hidden = false;
@@ -1070,8 +1200,9 @@ function render(){
   }
 
   renderDial(now, today, z, rows, live, heroInfo);
-  $("loc-label").textContent = `Location: ${loc.name||"custom"} —`;
-  $("loc-line").textContent = `All times for ${loc.name||"custom location"} · ${loc.israel?"Israel":"Diaspora"} schedule`;
+  $("loc-label").textContent = L(`Location: ${locName()} —`, `מיקום: ${locName()} —`);
+  $("loc-line").textContent = L(`All times for ${locName()} · ${loc.israel?"Israel":"Diaspora"} schedule`,
+    `כל הזמנים עבור ${locName()} · לוח ${loc.israel?"ארץ ישראל":"חוץ לארץ"}`);
   $("il-check").checked = !!loc.israel;
 }
 
@@ -1130,7 +1261,9 @@ function renderDial(now, today, z, rows, live, hero){
     svg += line(a, R-W/2, card ? R+W/2 : R-W/2+5, c("--bg"), card?1.6:1, `opacity="${card?0.7:0.32}"`);
   }
   // hour labels sit outside the ring, clear of the hand's sweep
-  for(const [txt,a] of [["noon",0],["6 pm",90],["midnight",180],["6 am",270]]){
+  const HOUR_LBL = LANG==="he" ? [["12:00",0],["18:00",90],["00:00",180],["06:00",270]]
+                                 : [["noon",0],["6 pm",90],["midnight",180],["6 am",270]];
+  for(const [txt,a] of HOUR_LBL){
     const [x,y] = pt(a, R+W/2+13);
     svg += `<text x="${x}" y="${y}" fill="${c("--ink-dim")}" font-size="8" font-weight="600"
       text-anchor="middle" dominant-baseline="middle" letter-spacing="0.4">${txt}</text>`;
@@ -1177,15 +1310,16 @@ function renderDial(now, today, z, rows, live, hero){
   const dial = $("dial");
   dial.innerHTML = svg;
   dial.setAttribute("aria-label", live
-    ? `24-hour dial. Now ${fmtTime(now)}.` + (primary?` Next: ${primary.name} at ${fmtTime(primary.t)}.`:"")
-    : `24-hour dial for the selected date.`);
+    ? L(`24-hour dial. Now ${fmtTime(now)}.`, `שעון 24 שעות. עכשיו ${fmtTime(now)}.`)
+      + (primary ? L(` Next: ${primary.name} at ${fmtTime(primary.t)}.`, ` הבא: ${primary.name} ב־${fmtTime(primary.t)}.`) : "")
+    : L(`24-hour dial for the selected date.`, `שעון 24 שעות לתאריך הנבחר.`));
 
   // what follows the headline, in one quiet line — the table carries the rest
   // "also", not "then" — the headline is the soonest *deadline*, so a secondary
   // mark (netz, say) can legitimately fall before it
   const rest = marks.filter(m=>!m.primary);
   $("then-line").innerHTML = rest.length
-    ? "also " + rest.map(m=>`<b>${fmtTime(m.t)}</b> ${m.name}`).join(" · ")
+    ? L("also ", "וגם ") + rest.map(m=>`<b>${fmtTime(m.t)}</b> ${m.name}`).join(" · ")
     : "";
 }
 
@@ -1198,23 +1332,26 @@ function tzOffsetMin(date, tz){
 
 /* ---------- location UI ---------- */
 const sel = $("loc-select");
-sel.innerHTML = PRESETS.map(p=>`<option value="${p.id}">${p.name}</option>`).join("")
-  + `<option value="__custom" hidden>My location</option>`;
-sel.value = loc.id || "__custom";
+function fillPresets(){
+  sel.innerHTML = PRESETS.map(p=>`<option value="${p.id}">${L(p.name, p.he)}</option>`).join("")
+    + `<option value="__custom" hidden>${L("My location", "המיקום שלי")}</option>`;
+  sel.value = loc.id || "__custom";
+}
+fillPresets();
 sel.addEventListener("change", ()=>{
   const p = PRESETS.find(x=>x.id===sel.value);
   if(p){ loc = p; save(); render(); }
 });
 $("loc-geo").addEventListener("click", ()=>{
-  if(!navigator.geolocation){ $("loc-geo").textContent = "Geolocation unavailable"; return; }
-  $("loc-geo").textContent = "Locating…";
+  if(!navigator.geolocation){ $("loc-geo").textContent = L("Geolocation unavailable", "איתור מיקום אינו זמין"); return; }
+  $("loc-geo").textContent = L("Locating…", "מאתר…");
   navigator.geolocation.getCurrentPosition(g=>{
     loc = {id:"__custom", name:"My location", lat:g.coords.latitude, lon:g.coords.longitude,
            tz:Intl.DateTimeFormat().resolvedOptions().timeZone, candles:18};
     sel.value = "__custom";
-    $("loc-geo").textContent = "Use my location";
+    $("loc-geo").textContent = L("Use my location", "איתור המיקום שלי");
     save(); render();
-  }, ()=>{ $("loc-geo").textContent = "Location blocked — pick a city"; });
+  }, ()=>{ $("loc-geo").textContent = L("Location blocked — pick a city", "המיקום חסום — בחרו עיר"); });
 });
 function save(){ try{ localStorage.setItem("zmanim-loc", JSON.stringify(loc)); }catch(e){} }
 
@@ -1291,6 +1428,7 @@ cityIn.addEventListener("input", ()=>{
   };
   const withAltDisplay = (c, tzStr) => { // if the hit came from an alternate name, display it
     let nm = c[0], cc = c[1];
+    const heAlt = (c[5] && c[5].split(";").find(a=>/[א-ת]/.test(a))) || "";
     if(c[5]){
       const pn = normE(c[0]);
       if(!(pn.includes(qe) || skel(pn).includes(qs))){
@@ -1298,7 +1436,8 @@ cityIn.addEventListener("input", ()=>{
         if(a){ nm = a; cc = c[1]+" · "+c[0]; }
       }
     }
-    return [nm, cc, [nm, c[1], c[2], c[3], tzStr]];
+    const shown = LANG==="he" && nm===c[0] && heAlt ? heAlt : nm;
+    return [shown, shown===nm ? cc : c[1]+" · "+c[0], [nm, c[1], c[2], c[3], tzStr, heAlt]];
   };
   scan(CITIES_N, CITIES_S, i=>withAltDisplay(CITIES[i], CITIES[i][4]));
   if(extraState==="ready")
@@ -1306,17 +1445,17 @@ cityIn.addEventListener("input", ()=>{
   const hits = tiers.flat().slice(0,9);
   window.__cityHits = hits;
   let html = hits.map((h,i)=>`<button type="button" data-i="${i}">${h.name}<span class="cc">${h.cc}</span></button>`).join("");
-  if(extraState==="loading") html += `<button type="button" disabled>Loading full index (237k places, one time)…</button>`;
-  else if(extraState==="failed") html += `<button type="button" disabled>Full index unavailable — showing major cities</button>`;
-  else if(!hits.length) html = `<button type="button" disabled>No matching place — try coordinates</button>`;
+  if(extraState==="loading") html += `<button type="button" disabled>${L("Loading full index (237k places, one time)…", "טוען אינדקס מלא (237 אלף מקומות, פעם אחת)…")}</button>`;
+  else if(extraState==="failed") html += `<button type="button" disabled>${L("Full index unavailable — showing major cities", "האינדקס המלא אינו זמין — מוצגות ערים עיקריות")}</button>`;
+  else if(!hits.length) html = `<button type="button" disabled>${L("No matching place — try coordinates", "לא נמצא מקום — נסו קואורדינטות")}</button>`;
   cityRes.innerHTML = html;
   cityRes.hidden = false;
 });
 cityRes.addEventListener("click", e=>{
   const b = e.target.closest("button[data-i]"); if(!b) return;
-  const [n,co,la,lo,tz] = window.__cityHits[+b.dataset.i].payload;
+  const [n,co,la,lo,tz,heAlt] = window.__cityHits[+b.dataset.i].payload;
   const il = co==="IL" || /^Asia\/(Jerusalem|Hebron|Gaza)$/.test(tz);
-  loc = {id:"__custom", name:`${n} (${co})`, lat:la, lon:lo, tz,
+  loc = {id:"__custom", name:`${n} (${co})`, he: heAlt || "", lat:la, lon:lo, tz,
          candles: (n==="Jerusalem"&&co==="IL") ? 40 : 18, israel: il};
   sel.value = "__custom"; cityIn.value = ""; cityRes.hidden = true;
   save(); render();
@@ -1348,10 +1487,11 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !reader.hidden)
 function openReader(title){
   readerTitle.textContent = title;
   reader.hidden = false;
-  readerBody.innerHTML = `<p class="rd-status">Loading from Sefaria…</p>`;
+  readerBody.innerHTML = `<p class="rd-status">${L("Loading from Sefaria…", "טוען מספריא…")}</p>`;
 }
 async function showDaf(ref){
-  openReader(ref);
+  const mm = ref.match(/^(.*) (\d+)$/);
+  openReader(mm ? dafLabel(mm[1], +mm[2]) : ref);
   try{
     const amud = am => fetch(`https://www.sefaria.org/api/texts/${encodeURIComponent(ref.replace(/ /g,"."))}${am}?context=0`)
       .then(r=>{ if(!r.ok) throw 0; return r.json(); });
@@ -1361,16 +1501,16 @@ async function showDaf(ref){
       let h = `<h3 class="rd-amud">${label}</h3>`;
       for(let i=0;i<Math.max(he.length,en.length);i++){
         if(he[i]) h += `<p class="rd-he" dir="rtl" lang="he">${he[i]}</p>`;
-        if(en[i]) h += `<p class="rd-en">${en[i]}</p>`;
+        if(en[i]) h += `<p class="rd-en rd-tr">${en[i]}</p>`;
       }
       return h;
     };
-    readerBody.innerHTML = seg(a, a.ref||ref+"a") + seg(bb, bb.ref||ref+"b") +
-      `<p class="rd-credit">Text: Sefaria · English: The William Davidson Talmud (CC BY-NC)</p>`;
+    readerBody.innerHTML = seg(a, L(a.ref||ref+"a", a.heRef||a.ref||ref+"a")) + seg(bb, L(bb.ref||ref+"b", bb.heRef||bb.ref||ref+"b")) +
+      `<p class="rd-credit">${L("Text: Sefaria · English: The William Davidson Talmud (CC BY-NC)", "הטקסט: ספריא")}</p>`;
     readerBody.scrollTop = 0;
   }catch(err){
-    readerBody.innerHTML = `<p class="rd-status">Couldn't load the text (offline, or this host blocks external requests).<br>
-      <a target="_blank" rel="noopener" href="https://www.sefaria.org/${encodeURIComponent(ref.replace(/ /g,"."))}a">Open ${ref} on Sefaria ↗</a></p>`;
+    readerBody.innerHTML = `<p class="rd-status">${L("Couldn't load the text (offline, or this host blocks external requests).", "לא ניתן לטעון את הטקסט (אין חיבור, או שהאתר חוסם בקשות חיצוניות).")}<br>
+      <a target="_blank" rel="noopener" href="https://www.sefaria.org/${encodeURIComponent(ref.replace(/ /g,"."))}a">${L(`Open ${ref} on Sefaria ↗`, "פתיחה בספריא ↗")}</a></p>`;
   }
 }
 async function showChok(){
@@ -1380,15 +1520,16 @@ async function showChok(){
   const DAYS = ["יום ראשון","יום שני","יום שלישי","יום רביעי","יום חמישי","יום שישי"];
   const r = window.__rolled || partsInTz(new Date(), loc.tz);
   const wdIdx = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(weekdayInTz(noonUTC(r),"UTC"));
-  openReader(`חק לישראל — ${first}`);
+  openReader(`חק לישראל — ${L(first, "פרשת "+(he||first))}`);
   if(wdIdx===6){
-    readerBody.innerHTML = `<p class="rd-status">The Chok L'Yisrael seder runs Sunday–Friday; on Shabbat, enjoy the parsha itself. Sunday's seder will appear tonight after nightfall.</p>`;
+    readerBody.innerHTML = `<p class="rd-status">${L("The Chok L'Yisrael seder runs Sunday–Friday; on Shabbat, enjoy the parsha itself. Sunday's seder will appear tonight after nightfall.",
+      "סדר חק לישראל הוא מיום ראשון עד שישי; בשבת — לימוד הפרשה עצמה. הסדר של יום ראשון יופיע הלילה אחרי צאת הכוכבים.")}</p>`;
     return;
   }
   const id = he && C.map[he+"|"+DAYS[wdIdx]];
   if(!id){
-    readerBody.innerHTML = `<p class="rd-status">No Chok sheet found for this week.
-      <a target="_blank" rel="noopener" href="https://www.sefaria.org/collections/%D7%97%D7%A7-%D7%9C%D7%99%D7%A9%D7%A8%D7%90%D7%9C">Browse on Sefaria ↗</a></p>`;
+    readerBody.innerHTML = `<p class="rd-status">${L("No Chok sheet found for this week.", "לא נמצא דף חק לישראל לשבוע זה.")}
+      <a target="_blank" rel="noopener" href="https://www.sefaria.org/collections/%D7%97%D7%A7-%D7%9C%D7%99%D7%A9%D7%A8%D7%90%D7%9C">${L("Browse on Sefaria ↗", "עיון בספריא ↗")}</a></p>`;
     return;
   }
   try{
@@ -1402,46 +1543,47 @@ async function showChok(){
         const heT = s.text && s.text.he;
         if(heT) h += `<div class="rd-he rd-chok" dir="rtl" lang="he">${heT}</div>`;
         if(/^Zohar/.test(s.ref))
-          h += `<div class="sulam-slot"><button type="button" class="learn-link sulam-btn" data-zref="${s.ref}">פירוש הסולם — show HaSulam ▸</button><div class="sulam-out"></div></div>`;
+          h += `<div class="sulam-slot"><button type="button" class="learn-link sulam-btn" data-zref="${s.ref}">${L("פירוש הסולם — show HaSulam ▸", "פירוש הסולם ▸")}</button><div class="sulam-out"></div></div>`;
       }
     }
-    readerBody.innerHTML = (h || `<p class="rd-status">Empty sheet.</p>`) +
-      `<p class="rd-credit">חק לישראל · texts via Sefaria (public-domain sources)</p>`;
+    readerBody.innerHTML = (h || `<p class="rd-status">${L("Empty sheet.", "הדף ריק.")}</p>`) +
+      `<p class="rd-credit">${L("חק לישראל · texts via Sefaria (public-domain sources)", "חק לישראל · הטקסטים באדיבות ספריא (נחלת הכלל)")}</p>`;
     readerBody.scrollTop = 0;
   }catch(err){
-    readerBody.innerHTML = `<p class="rd-status">Couldn't load (offline, or this host blocks external requests).<br>
-      <a target="_blank" rel="noopener" href="https://www.sefaria.org/sheets/${id}">Open today's Chok on Sefaria ↗</a></p>`;
+    readerBody.innerHTML = `<p class="rd-status">${L("Couldn't load (offline, or this host blocks external requests).", "לא ניתן לטעון (אין חיבור, או שהאתר חוסם בקשות חיצוניות).")}<br>
+      <a target="_blank" rel="noopener" href="https://www.sefaria.org/sheets/${id}">${L("Open today's Chok on Sefaria ↗", "פתיחת חק לישראל של היום בספריא ↗")}</a></p>`;
   }
 }
 function showPs27(){
   const P = window.__PS27;
   openReader("תהלים כ״ז");
-  let h = `<p class="rd-en" style="margin-top:0">L'David Hashem Ori — said twice daily from 1 Elul through Shemini Atzeret.</p>`;
+  let h = `<p class="rd-en" style="margin-top:0">${L("L'David Hashem Ori — said twice daily from 1 Elul through Shemini Atzeret.", "לדוד ה׳ אורי — נאמר פעמיים ביום מראש חודש אלול עד שמיני עצרת.")}</p>`;
   for(let i=0;i<P.he.length;i++)
     h += `<p class="rd-he rd-ps" dir="rtl" lang="he"><span class="pasuk-n">${gematria(i+1)}</span> ${P.he[i]}</p>`;
   readerBody.innerHTML = h +
-    `<p class="rd-credit">${P.heVersion} (CC BY-SA) · via Sefaria</p>`;
+    `<p class="rd-credit">${P.heVersion} (CC BY-SA) · ${L("via Sefaria", "באדיבות ספריא")}</p>`;
   readerBody.scrollTop = 0;
 }
 function showHaman(){
   const M = window.__MAN;
   openReader("פרשת המן");
-  let h = `<p class="rd-en" style="margin-top:0">Shemot 16:4–36 — each pasuk with Targum Onkelos. The custom is to read each pasuk twice and the Targum once.</p>`;
+  let h = `<p class="rd-en" style="margin-top:0">${L("Shemot 16:4–36 — each pasuk with Targum Onkelos. The custom is to read each pasuk twice and the Targum once.",
+    "שמות ט״ז, ד׳–ל״ו — כל פסוק עם תרגום אונקלוס. נוהגים לקרוא כל פסוק פעמיים ואת התרגום פעם אחת.")}</p>`;
   for(let i=0;i<M.he.length;i++){
     h += `<p class="rd-he rd-man" dir="rtl" lang="he"><span class="pasuk-n">${gematria(i+4)}</span> ${M.he[i]}</p>`;
     h += `<p class="rd-tg" dir="rtl" lang="arc">${M.tg[i]}</p>`;
   }
-  readerBody.innerHTML = h + `<p class="rd-credit">${M.heVersion||"Tanach with Ta'amei HaMikra"} · Targum: ${M.tgVersion||"Onkelos"} · via Sefaria</p>`;
+  readerBody.innerHTML = h + `<p class="rd-credit">${M.heVersion||"Tanach with Ta'amei HaMikra"} · ${L("Targum", "תרגום")}: ${M.tgVersion||"Onkelos"} · ${L("via Sefaria", "באדיבות ספריא")}</p>`;
   readerBody.scrollTop = 0;
 }
 async function showSulam(zref, slot, btn){
   btn.disabled = true;
-  slot.innerHTML = `<p class="rd-status">Loading HaSulam…</p>`;
+  slot.innerHTML = `<p class="rd-status">${L("Loading HaSulam…", "טוען את פירוש הסולם…")}</p>`;
   try{
     const rel = await fetch(`https://www.sefaria.org/api/related/${encodeURIComponent(zref)}`).then(r=>{ if(!r.ok) throw 0; return r.json(); });
     const refs = [...new Set((rel.links||[]).filter(l=>l.index_title==="Sulam on Zohar").map(l=>l.ref))]
       .sort((a,b)=>(parseInt(a.match(/(\d+)(?:-\d+)?$/)?.[1]||0)) - (parseInt(b.match(/(\d+)(?:-\d+)?$/)?.[1]||0)));
-    if(!refs.length){ slot.innerHTML = `<p class="rd-status">No HaSulam mapped to this passage on Sefaria.</p>`; return; }
+    if(!refs.length){ slot.innerHTML = `<p class="rd-status">${L("No HaSulam mapped to this passage on Sefaria.", "בספריא אין פירוש הסולם המקושר לקטע זה.")}</p>`; return; }
     const texts = await Promise.all(refs.slice(0,12).map(rf=>
       fetch(`https://www.sefaria.org/api/texts/${encodeURIComponent(rf.replace(/ /g,"_"))}?context=0`).then(r=>{ if(!r.ok) throw 0; return r.json(); })));
     slot.innerHTML = texts.map(t=>{
@@ -1451,7 +1593,7 @@ async function showSulam(zref, slot, btn){
     btn.hidden = true;
   }catch(err){
     btn.disabled = false;
-    slot.innerHTML = `<p class="rd-status">Couldn't load HaSulam (offline?).</p>`;
+    slot.innerHTML = `<p class="rd-status">${L("Couldn't load HaSulam (offline?).", "לא ניתן לטעון את פירוש הסולם (אין חיבור?).")}</p>`;
   }
 }
 document.addEventListener("click", e=>{
@@ -1464,6 +1606,33 @@ document.addEventListener("click", e=>{
   else if(b.dataset.ref) showDaf(b.dataset.ref);
 });
 
+/* ---------- language switch ---------- */
+function applyLang(){
+  const de = document.documentElement;
+  de.lang = LANG; de.dir = L("ltr", "rtl");
+  document.title = L("Zmanim", "זמנים");
+  for(const b of document.querySelectorAll("[data-setlang]")) b.setAttribute("aria-pressed", String(b.dataset.setlang===LANG));
+  // arrows point the way time runs in the reading direction
+  $("dn-prev").textContent = L("◀", "▶"); $("dn-next").textContent = L("▶", "◀");
+  $("dn-prev").setAttribute("aria-label", L("Previous day", "היום הקודם"));
+  $("dn-next").setAttribute("aria-label", L("Next day", "היום הבא"));
+  $("dn-date").setAttribute("aria-label", L("Choose a date", "בחירת תאריך"));
+  $("reader-close").setAttribute("aria-label", L("Close", "סגירה"));
+  cityIn.placeholder = L("Search any city…", "חיפוש עיר או יישוב…");
+  cityIn.setAttribute("aria-label", L("Search city", "חיפוש עיר"));
+  sel.setAttribute("aria-label", L("Choose location", "בחירת מיקום"));
+  $("loc-geo").textContent = L("Use my location", "איתור המיקום שלי");
+  fillPresets();
+}
+document.addEventListener("click", e=>{
+  const b = e.target.closest("[data-setlang]"); if(!b || b.dataset.setlang===LANG) return;
+  LANG = b.dataset.setlang;
+  try{ localStorage.setItem("zmanim-lang", LANG); }catch(e){}
+  cityRes.hidden = true;
+  applyLang(); render();
+});
+
+applyLang();
 render();
 setInterval(render, 30000);
 
