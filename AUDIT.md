@@ -24,7 +24,7 @@ was fixed on branch `fix/audit-findings` (commit `a8d2ca5`). Nothing has been pu
 ## Fixed, by dimension
 
 ### Astronomy / zmanim
-- Displayed times were truncated by `Intl`, so every zman showed up to 59 s early. Now rounded; nightfall-type times (tzeit, Rabbeinu Tam, fast end, Shabbat/Yom Tov ends, sunrise) round **up**. *Halachic note: rounding direction is a convention; this follows common luchot. Easy to change in `fmtTime`/`ROUND_UP`.*
+- Displayed times were truncated by `Intl`, so every zman showed up to 59 s early. Now rounded as printed luchot do: times you **wait for** round **up** (misheyakir, netz, mincha gedola/ketana, plag, tzeit, Rabbeinu Tam, fast end, Shabbat/Yom Tov ends, Tikkun Chatzot, the Kiddush Levana opening); **deadlines** round **down** (alot, sof zman Shema/tefilla, chatzot, candle lighting, shkia, fast start, chatzot halayla, the Kiddush Levana close). The countdown, greyed-out rows and dial switch at the minute shown. Set in `ROUND_UP` in `index.html`. *Two times serve both ways: alot is treated as a deadline (last eating before a fast or davening), plag as a start (earliest early-Shabbat candles); someone who davens Mincha until plag should treat it as a deadline.*
 - Dial local-midnight used the offset at noon, so on DST transition days the hand and arcs were an hour off before 02:00. Now the offset at midnight.
 - Geolocation assigned the device's timezone and never set `israel` or the Jerusalem candle custom. Now sets `israel` from the zone, `mukaf`/40 min from a Jerusalem bounding box, rounds the fix to ~1 km, has a 15 s timeout and distinguishes "blocked" from "no fix".
 
