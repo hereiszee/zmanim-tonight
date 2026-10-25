@@ -596,15 +596,26 @@ function partsInTz(date, tz){
   const [y,m,d] = p.split("-").map(Number);
   return {y,m,d};
 }
-// Intl truncates seconds, which shows every zman up to 59 s early. Luchot round
-// nightfall-type times UP (a fast or Shabbat shown ending a minute early is the
-// one direction that matters) and the rest to the nearest minute.
-const ROUND_UP = new Set(["tzeit","rt","fastEnd","sunrise"]);
-function fmtTime(date, up){
-  if(!date) return "—";
+// Zmanim are shown to the minute, and which way the seconds go is a halachic choice,
+// as in printed luchot: times you WAIT FOR round up, so they are never shown before
+// they arrive; deadlines you must BEAT round down, so they are never shown after
+// they pass. Everything not listed here is a deadline (Shema, tefilla, chatzot,
+// shkia, candles, alot — the last eating time before a fast — chatzot halayla).
+const ROUND_UP = new Set([
+  "misheyakir",    // earliest tallit & tefillin
+  "sunrise",       // netz — vatikin, the lechatchila start of Shema & Shacharit
+  "minchaG", "minchaK", // earliest Mincha / preferred Mincha
+  "plag",          // earliest early-Shabbat candles and Ma'ariv
+  "tzeit", "rt", "fastEnd", // nightfall: Shabbat, Yom Tov and fasts end
+  "tikkunChatzot", // earliest Tikkun Chatzot
+]);
+function roundZman(date, up){
   const ms = date.getTime();
-  const rounded = up ? Math.ceil(ms/60000)*60000 : Math.round(ms/60000)*60000;
-  return dtf(locTag(),{timeZone:loc.tz,hour:"numeric",minute:"2-digit"}).format(new Date(rounded));
+  return new Date((up ? Math.ceil(ms/60000) : Math.floor(ms/60000))*60000);
+}
+function fmtTime(date, up){ // round down by default — also how a clock reads
+  if(!date) return "—";
+  return dtf(locTag(),{timeZone:loc.tz,hour:"numeric",minute:"2-digit"}).format(roundZman(date, up));
 }
 function addDays(ymd, n){
   const dt = new Date(Date.UTC(ymd.y, ymd.m-1, ymd.d+n));
@@ -1023,9 +1034,10 @@ function renderInner(){
     // molad clock ≈ Jerusalem mean time (UTC+2:21); convert to a true instant for the window
     const m0 = moladMs(hYearNum, hp.month) - (2*60+21)*60000;
     const kStart = m0 + KL_EARLIEST_MS, kEnd = m0 + KL_LATEST_MS;
-    const fmtD = t => dtf(locTag(),{timeZone:loc.tz,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(new Date(t));
+    // the window opens (round up) and closes (round down) like any other zman
+    const fmtD = (t, up) => dtf(locTag(),{timeZone:loc.tz,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(roundZman(new Date(t), up));
     $("levana-line").textContent =
-      refMs < kStart ? L(`Kiddush Levana: from ${fmtD(kStart)}`, `קידוש לבנה: החל מ־${fmtD(kStart)}`) :
+      refMs < kStart ? L(`Kiddush Levana: from ${fmtD(kStart, true)}`, `קידוש לבנה: החל מ־${fmtD(kStart, true)}`) :
       refMs <= kEnd  ? L(`Kiddush Levana: until ${fmtD(kEnd)}`, `קידוש לבנה: עד ${fmtD(kEnd)}`) :
       L(`Kiddush Levana: after the next molad`, `קידוש לבנה: אחרי המולד הבא`);
   }
@@ -1169,8 +1181,8 @@ function renderInner(){
   );
   if(z.fastEnd && !/Yom Kippur/.test(fastToday.name))
     rows.push(["fastEnd", L("Fast ends", "סוף הצום"), L("nightfall", "צאת הכוכבים")]);
-  // which keys are nightfall-type (rounded up when shown)
-  const roundUp = new Set(ROUND_UP);
+  // keys rounded up when shown (see ROUND_UP); the after-nightfall block rows join below
+  const upKeys = new Set(ROUND_UP);
   // Shabbat/chag block schedule — shown from erev onward, since during the
   // rest days themselves the user won't be checking. Covers multi-day blocks
   // (2-day chag, chag→Shabbat, Shabbat→chag) with per-transition candle rules.
@@ -1188,11 +1200,11 @@ function renderInner(){
           z[key] = zi.candles;
           rows.push([key, L(`Candles ${wdOf(day)}`, `הדלקת נרות ${wdOf(day)}`), L("before sunset, from an existing flame", "לפני השקיעה, מאש קיימת")]);
         } else if(zi.tzeit){
-          z[key] = zi.tzeit; roundUp.add(key);
+          z[key] = zi.tzeit; upKeys.add(key);
           rows.push([key, L(`Candles ${wdOf(day)} night`, `הדלקת נרות ${wdOf(day)} בלילה`), L("after nightfall, from an existing flame", "אחרי צאת הכוכבים, מאש קיימת")]);
         }
       } else if(zi.tzeit){
-        z[key] = zi.tzeit; roundUp.add(key);
+        z[key] = zi.tzeit; upKeys.add(key);
         const lbl = weekdayInTz(noonUTC(day),"UTC")==="Sat" ? L("Shabbat ends", "צאת השבת") : L("Yom Tov ends", "צאת החג");
         rows.push([key, lbl, L(`${wdOf(day)} night · R"T ${fmtTime(zi.rt, true)}`, `${wdOf(day)} בלילה · ר״ת ${fmtTime(zi.rt, true)}`)]);
       }
@@ -1202,7 +1214,10 @@ function renderInner(){
   rows.push(["chatzotNight", L("Chatzot halayla", "חצות הלילה"), L("halachic midnight, tonight", "הלילה")]);
   if(z.tikkunChatzot)
     rows.push(["tikkunChatzot", L("Tikkun Chatzot", "תיקון חצות"), L("from 6 h after tzeit · Magen Avraham, Rebbe Nachman", "6 שעות אחרי צאת הכוכבים · מג״א, רבי נחמן")]);
-  const fmtKey = (k, t) => fmtTime(t, roundUp.has(k));
+  // From here on every listed zman IS its rounded minute, so the greyed-out rows, the
+  // hero, its countdown and the dial all switch at the time shown, not seconds later.
+  for(const [k] of rows) if(z[k]) z[k] = roundZman(z[k], upKeys.has(k));
+  const fmtKey = (k, t) => fmtTime(t, upKeys.has(k));
   $("times").innerHTML = rows.map(([k,name,sub])=>{
     const t = z[k];
     const passed = live && t && t < now;
@@ -1313,7 +1328,7 @@ function renderInner(){
         const seder = hp.month==="Nisan" && (hp.day===15 || (!loc.israel && hp.day===16));
         if(items.length===1) items.push(`<b>${L("regular Ma'ariv", "ערבית רגילה")}</b>`);
         if(z.chatzotNight){
-          const cz = fmtTime(z.chatzotNight, true);
+          const cz = fmtTime(z.chatzotNight); // a deadline: Shema, Ma'ariv, afikoman before it
           items.push(seder
             ? `<b class="on">${L(`afikoman before chatzot ${cz}`, `אפיקומן לפני חצות ${cz}`)}</b>`
             : `<b>${L(`Shema &amp; Ma'ariv before chatzot ${cz}`, `ק״ש וערבית לפני חצות ${cz}`)}</b>`);
